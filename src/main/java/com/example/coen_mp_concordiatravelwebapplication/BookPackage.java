@@ -132,4 +132,75 @@ public class BookPackage extends HttpServlet {
             e.printStackTrace();
         }
     }
+    
+        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        // JDBC connection details
+        String url = CONFIG.SQLURL;
+        String username = CONFIG.SQLUSER;
+        String password = CONFIG.SQLPASS;
+
+        // Retrieve the package ID, customer ID, and departure date from the request
+        String packageIdToBook = request.getParameter("packageId");
+        String customerIdToBook = request.getParameter("customerId");
+        String departureDate = request.getParameter("departureDate");
+
+        String bookingId = generateBookingId();
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // Establish a connection to the database
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            // Create a statement
+            Statement statement = connection.createStatement();
+
+            // Insert the booking into the database
+            String insertQuery = "INSERT INTO bookings (bookingId, packageId, customerId, departureDate) VALUES " +
+                    "('" + bookingId + "', '" + packageIdToBook + "', '" + customerIdToBook + "', '" + departureDate + "')";
+            statement.executeUpdate(insertQuery);
+
+            // Retrieve all bookings from the database
+            String selectQuery = "SELECT * FROM bookings";
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+
+            // Process the result set (you can customize this as per your requirement)
+            List<Bookings> bookings = new ArrayList<>();
+            while (resultSet.next()) {
+                String bookingIdResult = resultSet.getString("bookingId");
+                String packageIdResult = resultSet.getString("packageId");
+                String customerIdResult = resultSet.getString("customerId");
+                Timestamp departureDateResult = resultSet.getTimestamp("departureDate");
+
+                Bookings booking = new Bookings(bookingIdResult, packageIdResult, customerIdResult, departureDateResult);
+                bookings.add(booking);
+            }
+
+            // Set the bookings as a request attribute
+            request.setAttribute("bookings", bookings);
+
+            // Forward the request to the JSP page
+            request.getRequestDispatcher("createpackagesuccess.jsp").forward(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private String generateBookingId() {
+
+        int random = (int) (Math.random() * 9000) + 1000;
+
+
+        long timestamp = System.currentTimeMillis();
+
+
+        String bookingId = String.valueOf(random) + String.valueOf(timestamp);
+
+
+        bookingId = bookingId.substring(bookingId.length() - 4);
+
+        return bookingId;
+    }
 }
