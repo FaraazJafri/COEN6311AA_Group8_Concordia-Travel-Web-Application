@@ -256,3 +256,17 @@ form input[type="submit"]:hover {
     text-align: center;
     font-size: 24px;
 }
+
+/*Code for cancel button*/
+.customer-bookings .cancel-booking-button {
+    background-color: #ff5555;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.customer-bookings .cancel-booking-button:hover {
+    background-color: #ff0000;
+}
