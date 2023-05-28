@@ -4,7 +4,6 @@
 <html>
 <head>
     <title>Create Package</title>
-    <!-- Include necessary CSS and JavaScript files -->
     <link rel="stylesheet" type="text/css" href="css/createpackage.css">
 
     <script src="your-javascript-file.js"></script>
@@ -34,8 +33,6 @@
                 // Format arrival datetime
                 var arrivalDatetime = formatTimestamp(rawArrivalDatetime);
                 console.log('Formatted Arrival datetime:', arrivalDatetime);
-
-                // Rest of the code...
             });
 
             // Function to format timestamp to required format (YYYY-MM-DD HH:mm:ss)

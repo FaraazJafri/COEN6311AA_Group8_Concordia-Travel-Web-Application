@@ -46,7 +46,7 @@
       <th>Booking ID</th>
       <th>Package ID</th>
       <th>Departure Date</th>
-      <th>Action</th> <!-- Added column for cancellation action -->
+      <th>Action</th>
     </tr>
     </thead>
     <tbody>
