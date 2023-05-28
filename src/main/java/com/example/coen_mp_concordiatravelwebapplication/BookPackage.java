@@ -132,8 +132,8 @@ public class BookPackage extends HttpServlet {
             e.printStackTrace();
         }
     }
-    
-        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // JDBC connection details
         String url = CONFIG.SQLURL;
         String username = CONFIG.SQLUSER;

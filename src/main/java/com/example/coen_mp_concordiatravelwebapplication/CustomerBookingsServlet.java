@@ -60,8 +60,13 @@ public class CustomerBookingsServlet extends HttpServlet {
         // Set the list of customers as a request attribute
         request.setAttribute("customers", customers);
 
-        // Forward the request to the JSP page
-        request.getRequestDispatcher("bookings.jsp").forward(request, response);
+        String condition = request.getParameter("condition");
+        if (condition != null && condition.equals("Cancel")) {
+            request.getRequestDispatcher("cancelbooking.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("bookings.jsp").forward(request, response);
+        }
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -93,7 +98,7 @@ public class CustomerBookingsServlet extends HttpServlet {
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
 
-                String fullName = firstName + " "+ lastName;
+                String fullName = firstName + " " + lastName;
                 // Set the selected customer attribute
 
                 request.setAttribute("selectedCustomer", fullName);

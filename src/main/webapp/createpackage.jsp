@@ -138,29 +138,7 @@
 </head>
 <body>
 
-<div id="logo-container">
-    <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
-</div>
-
-<h1>Travel Packages</h1>
-
-<div id="container">
-    <ul id="menu">
-        <li><a href="homepage.jsp">Home</a></li>
-        <li><a href="#">Packages</a>
-            <ul>
-                <li><a href="createpackage.jsp">Create a package</a></li>
-                <li><a href="DisplayPackagesServlet">Display all packages</a></li>
-            </ul>
-        </li>
-        <li><a href="#">Bookings</a>
-            <ul>
-                <li><a href="#">View your bookings</a></li>
-                <li><a href="#">Modify your bookings</a></li>
-            </ul>
-        </li>
-    </ul>
-</div>
+<jsp:include page="menu.jsp" />
 
 <h2>Create Package</h2>
 

@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+<jsp:include page="menu.jsp" />
 <h1>Deletion Successful</h1>
 <p>The travel package has been successfully deleted.</p>
 <a href="homepage.jsp">Go back to home page</a>

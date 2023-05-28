@@ -12,7 +12,7 @@
   <link rel="stylesheet" type="text/css" href="css/displaypackage.css">
 </head>
 <body>
-<h1>Travel Packages</h1>
+<jsp:include page="menu.jsp" />
 
 <% List<TravelPackage> travelPackages = (List<TravelPackage>) request.getAttribute("travelPackages");
   if (travelPackages != null && !travelPackages.isEmpty()) { %>

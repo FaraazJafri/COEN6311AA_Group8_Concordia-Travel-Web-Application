@@ -61,6 +61,7 @@ public class CancelBookingServlet extends HttpServlet {
         // Forward the request to the JSP page
         request.getRequestDispatcher("cancelbooking.jsp").forward(request, response);
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = CONFIG.SQLURL;
         String username = CONFIG.SQLUSER;
