@@ -5,6 +5,8 @@
   <title>Search Travel Packages</title>
 </head>
 <body>
+<jsp:include page="menu.jsp" />
+
 <h1>Search Travel Packages</h1>
 <form action="SearchPriceServlet" method="GET">
   <label for="minPrice">Minimum Price:</label>
@@ -17,3 +19,4 @@
 </form>
 </body>
 </html>
+

@@ -9,10 +9,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Modify Travel Package</title>
-  <link rel="stylesheet" type="text/css" href="css/displaypackage.css">
+  <link rel="stylesheet" type="text/css" href="css/modifypackagedisplay.css">
 </head>
 <body>
-<h1>Modify Travel Package</h1>
+<div id="logo-container">
+  <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
+</div>
+
+<jsp:include page="menu.jsp" />
+
+<h2>Modify Travel Package</h2>
 
 <form action="ModifyPackageDisplayServlet" method="post">
   <label for="packageId">Enter the Package ID to modify:</label>

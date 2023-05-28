@@ -1,12 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.packageModels.*" %>
-<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %><%--
-  Created by IntelliJ IDEA.
-  User: shive
-  Date: 2023-05-22
-  Time: 3:44 p.m.
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

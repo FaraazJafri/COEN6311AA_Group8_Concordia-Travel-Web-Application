@@ -12,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="css/displaypackage.css">
 </head>
 <body>
+<jsp:include page="menu.jsp" />
 <h1>Remove Travel Package</h1>
 
 <form action="RemovePackageDisplayServlet" method="post">
