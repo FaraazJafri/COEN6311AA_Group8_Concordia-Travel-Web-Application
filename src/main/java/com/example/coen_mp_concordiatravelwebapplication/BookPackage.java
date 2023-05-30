@@ -102,7 +102,7 @@ public class BookPackage extends HttpServlet {
                 }
             }
 
-            String queryCustomer = "SELECT * FROM Customer";
+            String queryCustomer = "SELECT * FROM customer";
             ResultSet resultSetCustomer = statement.executeQuery(queryCustomer);
 
             // Process the result set
@@ -189,18 +189,10 @@ public class BookPackage extends HttpServlet {
 
 
     private String generateBookingId() {
-
         int random = (int) (Math.random() * 9000) + 1000;
-
-
         long timestamp = System.currentTimeMillis();
-
-
         String bookingId = String.valueOf(random) + String.valueOf(timestamp);
-
-
         bookingId = bookingId.substring(bookingId.length() - 4);
-
         return bookingId;
     }
 }
