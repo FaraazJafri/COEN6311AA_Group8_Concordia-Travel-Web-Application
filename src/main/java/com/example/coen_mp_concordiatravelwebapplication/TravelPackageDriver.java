@@ -1,9 +1,7 @@
 package com.example.coen_mp_concordiatravelwebapplication;
 
-import com.example.coen_mp_concordiatravelwebapplication.config.CONFIG;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.*;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,31 +11,19 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.io.*;
+public class TravelPackageDriver {
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-
-@WebServlet(name = "DisplayPackagesServlet", value = "/DisplayPackagesServlet")
-public class DisplayPackagesServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public static void main(String[] args) {
         // JDBC connection details
-
+        String url = "jdbc:mysql://localhost:3306/travelsystem";
+        String username = "root";
+        String password = "Zeba_b38";
 
         // Create an empty list to store travel packages
         List<TravelPackage> travelPackages = new ArrayList<>();
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
         // Establish a connection to the database
-        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             // Create a statement
             Statement statement = connection.createStatement();
 
@@ -106,11 +92,10 @@ public class DisplayPackagesServlet extends HttpServlet {
                 }
             }
 
-            // Set the travel packages as a request attribute
-            request.setAttribute("travelPackages", travelPackages);
-
-            // Forward the request to the JSP page
-            request.getRequestDispatcher("displaypackages.jsp").forward(request, response);
+            // Print the travel package information
+            for (TravelPackage travelPackage : travelPackages) {
+                System.out.println(travelPackage);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

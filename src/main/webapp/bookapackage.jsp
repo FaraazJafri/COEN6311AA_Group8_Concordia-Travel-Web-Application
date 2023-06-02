@@ -88,6 +88,7 @@
 <p>No travel packages found.</p>
 <% } %>
 
+<% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
 <h2>Customers</h2>
 
 <table>
@@ -123,14 +124,16 @@
     <% } %>
     </tbody>
 </table>
-
+<% } %>
 <h2>Make a Booking</h2>
 
 <form action="BookPackageServlet" method="POST">
     <label for="packageId">Package ID:</label>
     <input type="text" id="packageId" name="packageId" required><br><br>
+    <% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
     <label for="customerId">Customer ID:</label>
     <input type="text" id="customerId" name="customerId" required><br><br>
+    <% } %>
     <label for="departureDate">Departure Date:</label>
     <input type="datetime-local" id="departureDate" name="departureDate" required><br><br>
     <input type="submit" value="Book Package">

@@ -49,9 +49,9 @@ h1:before {
 }
 
 #logo {
-    max-width: 200px;
-    height: auto;
-    opacity: 0.9;
+    max-width: 200px; /* Adjust the max-width to fit your logo size */
+    height: auto; /* Maintain aspect ratio */
+    opacity: 0.9; /* Set the opacity value to make the logo translucent */
     clip-path: inset(0 0 20% 0);
 }
 
@@ -175,6 +175,7 @@ h1:before {
     background: rgba(0,223,252,.02);
 }
 
+/*Give the css for displaying the customer bookings*/
 h2 {
     margin-top: 30px;
 }
@@ -216,6 +217,7 @@ form input[type="submit"]:hover {
     background-color: #555;
 }
 
+/*Add the code for displaying customer bookings*/
 .customer-bookings {
     margin-top: 30px;
 }
@@ -247,6 +249,7 @@ form input[type="submit"]:hover {
     text-align: center;
 }
 
+/*Add the code for here is your booking*/
 .booking-title {
     margin-top: 30px;
     font-weight: bold;

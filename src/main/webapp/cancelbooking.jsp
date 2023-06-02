@@ -1,6 +1,6 @@
 <%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Bookings" %>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
@@ -37,7 +37,7 @@
 <p class="booking-title">Here is your booking <%= selectedCustomer %>:</p>
 <% } %>
 
-<% List<Bookings> customerBookings = (List<Bookings>) request.getAttribute("customerBookings");
+<% List<Booking> customerBookings = (List<Booking>) request.getAttribute("customerBookings");
   if (customerBookings != null && !customerBookings.isEmpty()) { %>
 <div class="customer-bookings">
   <table>
@@ -46,11 +46,11 @@
       <th>Booking ID</th>
       <th>Package ID</th>
       <th>Departure Date</th>
-      <th>Action</th>
+      <th>Action</th> <!-- Added column for cancellation action -->
     </tr>
     </thead>
     <tbody>
-    <% for (Bookings booking : customerBookings) { %>
+    <% for (Booking booking : customerBookings) { %>
     <tr>
       <td><%= booking.getBookingId() %></td>
       <td><%= booking.getPackageId() %></td>

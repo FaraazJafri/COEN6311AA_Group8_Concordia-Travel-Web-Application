@@ -19,7 +19,7 @@ import java.util.List;
 @WebServlet(name = "RemovePackageDisplayServlet", value = "/RemovePackageDisplayServlet")
 public class RemovePackageDisplayServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         // JDBC connection details
@@ -112,7 +112,7 @@ public class RemovePackageDisplayServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-    
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         // JDBC connection details

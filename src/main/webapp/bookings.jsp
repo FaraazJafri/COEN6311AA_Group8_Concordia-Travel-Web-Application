@@ -1,6 +1,12 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Bookings" %>
-<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking" %>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %><%--
+  Created by IntelliJ IDEA.
+  User: shive
+  Date: 2023-05-22
+  Time: 4:35 p.m.
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -36,7 +42,7 @@
 <p class="booking-title">Here is your booking <%= selectedCustomer %>:</p>
 <% } %>
 
-<% List<Bookings> customerBookings = (List<Bookings>) request.getAttribute("customerBookings");
+<% List<Booking> customerBookings = (List<Booking>) request.getAttribute("customerBookings");
     if (customerBookings != null && !customerBookings.isEmpty()) { %>
 <div class="customer-bookings">
     <table>
@@ -48,7 +54,7 @@
         </tr>
         </thead>
         <tbody>
-        <% for (Bookings booking : customerBookings) { %>
+        <% for (Booking booking : customerBookings) { %>
         <tr>
             <td><%= booking.getBookingId() %>
             </td>

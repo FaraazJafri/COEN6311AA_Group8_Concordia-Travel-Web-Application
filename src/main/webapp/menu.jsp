@@ -15,10 +15,12 @@
     <li><a href="homepage.jsp">Home</a></li>
     <li><a href="#">Packages</a>
       <ul>
+        <% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
         <li><a href="createpackage.jsp">Create a package</a></li>
-        <li><a href="DisplayPackagesServlet">Display all packages</a></li>
         <li><a href="RemovePackageDisplayServlet">Remove a package</a></li>
         <li><a href="ModifyPackageDisplayServlet">Modify a package</a></li>
+        <% } %>
+        <li><a href="DisplayPackagesServlet">Display all packages</a></li>
       </ul>
     </li>
     <li><a href="#">Bookings</a>
@@ -28,17 +30,20 @@
         <li><a href="CancelBookingServlet">Cancel your bookings</a></li>
       </ul>
     </li>
+    <% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
     <li><a href="#">Customer</a>
       <ul>
         <li><a href="addcustomer.jsp">Add a Customer</a></li>
       </ul>
     </li>
+    <% } %>
     <li><a href="#">Search</a>
       <ul>
         <li><a href="searchlocation.jsp">Search package by location</a></li>
         <li><a href="searchprice.jsp">Search package by price</a></li>
       </ul>
     </li>
+    <li><a href="login.jsp">Logout</a></li>
   </ul>
 </div>
 

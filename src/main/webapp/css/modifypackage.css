@@ -49,9 +49,9 @@ h1:before {
 }
 
 #logo {
-    max-width: 200px;
-    height: auto;
-    opacity: 0.9;
+    max-width: 200px; /* Adjust the max-width to fit your logo size */
+    height: auto; /* Maintain aspect ratio */
+    opacity: 0.9; /* Set the opacity value to make the logo translucent */
     clip-path: inset(0 0 20% 0);
 }
 

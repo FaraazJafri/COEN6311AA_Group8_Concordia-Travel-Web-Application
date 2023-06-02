@@ -49,9 +49,9 @@ h1:before {
 }
 
 #logo {
-    max-width: 200px;
-    height: auto;
-    opacity: 0.9;
+    max-width: 200px; /* Adjust the max-width to fit your logo size */
+    height: auto; /* Maintain aspect ratio */
+    opacity: 0.9; /* Set the opacity value to make the logo translucent */
     clip-path: inset(0 0 20% 0);
 }
 
@@ -175,6 +175,7 @@ h1:before {
     background: rgba(0,223,252,.02);
 }
 
+/*The css for modify package display, fields and buttons*/
 h2 {
     text-align: center;
     margin-top: 20px;

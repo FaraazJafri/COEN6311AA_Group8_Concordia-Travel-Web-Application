@@ -18,7 +18,7 @@
 
 <%
   // Retrieve the travelPackages list from the request attribute
-  TravelPackage selectedPackage = (TravelPackage) request.getAttribute("travelPackage");
+   TravelPackage selectedPackage = (TravelPackage) request.getAttribute("travelPackage");
 %>
 
 <div class="form-container">
