@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
     private UserDAO userDAO;
 
     @Override
@@ -32,11 +32,18 @@ public class LoginServlet extends HttpServlet {
 
         // Perform user authentication
         User user = userDAO.authenticate(username, password);
+
         if (user != null) {
+            String firstName = user.getFirstName();
+            String lastName = user.getLastName();
+
+            String fullName = firstName + " " + lastName;
+
             // Authentication successful, store user information in session
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
             session.setAttribute("role", user.getRole());
+            session.setAttribute("fullName", fullName);
 
             // Redirect to the home page
             response.sendRedirect("homepage.jsp");

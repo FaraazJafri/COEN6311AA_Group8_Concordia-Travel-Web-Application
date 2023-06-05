@@ -12,9 +12,6 @@
   <link rel="stylesheet" type="text/css" href="css/modifypackagedisplay.css">
 </head>
 <body>
-<div id="logo-container">
-  <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
-</div>
 
 <jsp:include page="menu.jsp" />
 
@@ -23,7 +20,7 @@
 <form action="ModifyPackageDisplayServlet" method="post">
   <label for="packageId">Enter the Package ID to modify:</label>
   <input type="text" id="packageId" name="packageId">
-  <input type="submit" value="Update">
+  <input type="submit" value="Modify">
 </form>
 
 <h2>Travel Packages</h2>

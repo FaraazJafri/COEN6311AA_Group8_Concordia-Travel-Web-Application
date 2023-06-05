@@ -3,14 +3,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/forgotpassword.css">
     <title>Forgot Password</title>
 </head>
 <body>
-<h1>Forgot Password</h1>
+
+<div id="logo-container">
+    <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
+</div>
+
+<h1>Travel Packages</h1>
+
 <% if (request.getAttribute("errorMessage") != null) { %>
 <p style="color: red;"><%= request.getAttribute("errorMessage") %></p>
 <% } %>
 <form action="forgotpassword" method="post">
+    <h2>Forgot Password</h2>
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required><br><br>
 

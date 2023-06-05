@@ -27,9 +27,11 @@ public class User {
         this.age = age;
     }
 
-    public User(String username, String role) {
+    public User(String username, String role, String firstName, String lastName) {
         this.username = username;
         this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public User(String firstName, String lastName, String dateOfBirth, String email, String username, String password, String phoneNumber, int age, String gender, String role) {
@@ -43,6 +45,26 @@ public class User {
         this.age = age;
         this.gender = gender;
         this.role = role;
+    }
+
+    public User(int userId, String username, String email, String phone, String firstName, String lastName) {
+        this.userId = String.valueOf(userId);
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phone;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public User(String userId, String firstName, String lastName, String dob, String email, String phoneNumber, String gender, int age) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dob;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.age = age;
     }
 
     public String getUserId() {

@@ -1,12 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking" %>
-<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %><%--
-  Created by IntelliJ IDEA.
-  User: shive
-  Date: 2023-05-22
-  Time: 4:35 p.m.
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.userModels.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,15 +12,15 @@
 <jsp:include page="menu.jsp"/>
 
 <h2>Customer Bookings</h2>
-
+<% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
 <form action="CustomerBookingsServlet" method="POST">
     <label for="customerId">Select a Customer:</label>
     <select id="customerId" name="customerId">
         <option value="" selected>-- Select Customer --</option>
-        <% List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+        <% List<User> customers = (List<User>) request.getAttribute("customers");
             if (customers != null && !customers.isEmpty()) {
-                for (Customer customer : customers) { %>
-        <option value="<%= customer.getCustomerId() %>"><%= customer.getFirstName() %> <%= customer.getLastName() %>
+                for (User customer : customers) { %>
+        <option value="<%= customer.getUserId() %>"><%= customer.getFirstName() %> <%= customer.getLastName() %>
         </option>
         <% }
         } %>
@@ -33,7 +28,7 @@
     <input type="hidden" name="condition" value="View">
     <input type="submit" value="Get Customer Bookings">
 </form>
-
+<% } %>
 <hr>
 
 
@@ -68,7 +63,7 @@
     </table>
 </div>
 <% } else { %>
-<p>No bookings found for the selected customer.</p>
+<p>No bookings found.</p>
 <% } %>
 
 

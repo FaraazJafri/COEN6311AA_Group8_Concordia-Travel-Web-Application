@@ -6,11 +6,8 @@
 </head>
 <body>
 <jsp:include page="menu.jsp" />
-
-<h1>Package Modified Successfully</h1>
-
-<p>The travel package has been successfully modified.</p>
-
+<h1><%= request.getAttribute("heading") %></h1>
+<p><%= request.getAttribute("message") %></p>
 <p><a href="homepage.jsp">Go to Homepage</a></p>
 </body>
 </html>

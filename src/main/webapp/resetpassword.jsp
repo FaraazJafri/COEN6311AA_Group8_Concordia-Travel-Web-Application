@@ -3,14 +3,22 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="css/resetpassword.css">
   <title>Reset Password</title>
 </head>
 <body>
-<h1>Reset Password</h1>
+
+<div id="logo-container">
+  <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
+</div>
+
+<h1>Travel Packages</h1>
+
 <% if (request.getAttribute("errorMessage") != null) { %>
-<p style="color: red;"><%= request.getAttribute("errorMessage") %></p>
+<p class="error-message"><%= request.getAttribute("errorMessage") %></p>
 <% } %>
 <form action="resetpassword" method="post">
+  <h2>Reset Password</h2>
   <input type="hidden" id="userID" name="userID" value="<%= request.getAttribute("userID") %>">
   <label for="password">New Password:</label>
   <input type="password" id="password" name="password" required><br><br>

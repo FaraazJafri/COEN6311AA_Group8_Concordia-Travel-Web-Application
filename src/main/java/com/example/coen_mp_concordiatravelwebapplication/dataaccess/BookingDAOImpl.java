@@ -2,8 +2,10 @@ package com.example.coen_mp_concordiatravelwebapplication.dataaccess;
 
 import com.example.coen_mp_concordiatravelwebapplication.config.CONFIG;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
+import com.microsoft.sqlserver.jdbc.ISQLServerConnection;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +15,24 @@ public class BookingDAOImpl implements BookingDAO {
     String password = CONFIG.SQLPASS;
 
     @Override
-    public void saveBooking(String bookingId, String packageIdToBook, String customerIdToBook, String departureDate) {
+    public void saveBooking(String bookingId, String packageIdToBook, String customerIdToBook, Timestamp departureDate) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            Statement statement = connection.createStatement();
+            String insertQuery = "INSERT INTO bookings (bookingId, packageId, customerId, departureDate) VALUES (?, ?, ?, ?)";
 
-            // Insert the booking into the database
-            String insertQuery = "INSERT INTO bookings (bookingId, packageId, customerId, departureDate) VALUES " +
-                    "('" + bookingId + "', '" + packageIdToBook + "', '" + customerIdToBook + "', '" + departureDate + "')";
-            statement.executeUpdate(insertQuery);
-        } catch (SQLException e) {
+            PreparedStatement statement = connection.prepareStatement(insertQuery);
+            statement.setString(1, bookingId);
+            statement.setString(2, packageIdToBook);
+            statement.setString(3, customerIdToBook);
+            statement.setTimestamp(4, departureDate);
+
+            // Execute the query
+            statement.executeUpdate();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -35,7 +41,7 @@ public class BookingDAOImpl implements BookingDAO {
     public List<Booking> getAllBookings() {
         List<Booking> bookings = new ArrayList<>();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +71,7 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public int cancelBooking(String customerId, String bookingId) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -85,5 +91,25 @@ public class BookingDAOImpl implements BookingDAO {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public Boolean modifyBooking(String bookingId, String packageId, Timestamp departureDate) {
+
+        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+            String updateQuery = "UPDATE bookings SET packageId = ?, departureDate = ? WHERE bookingId = ?";
+            PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+            updateStatement.setString(1, packageId);
+            updateStatement.setString(2, String.valueOf(departureDate));
+            updateStatement.setString(3, bookingId);
+            updateStatement.executeUpdate();
+
+
+            updateStatement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }

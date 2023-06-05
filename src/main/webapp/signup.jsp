@@ -3,14 +3,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/signup.css">
     <title>Sign Up</title>
 </head>
 <body>
-<h1>Sign Up</h1>
+
 <% if (request.getAttribute("errorMessage") != null) { %>
 <p style="color: red;"><%= request.getAttribute("errorMessage") %>
 </p>
 <% } %>
+
+<div id="logo-container">
+    <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
+</div>
+
+<h1>Travel Packages</h1>
+<div id="signup-container">
 <form action="signup" method="post">
     <label for="firstName">First Name:</label>
     <input type="text" id="firstName" name="firstName" required><br><br>
@@ -43,15 +51,10 @@
         <option value="Other">Other</option>
     </select><br><br>
 
-    <label for="role">Role:</label>
-    <select id="role" name="role">
-        <option value="Customer">Customer</option>
-        <option value="Agent">Agent</option>
-        <option value="Admin">Admin</option>
-    </select><br><br>
-
     <input type="submit" value="Sign Up">
 </form>
 <p>Already have an account? <a href="login.jsp">Login</a></p>
+
+</div>
 </body>
 </html>

@@ -2,11 +2,19 @@ package com.example.coen_mp_concordiatravelwebapplication.config;
 
 public class CONFIG {
 
-//    public static final String SQLURL = "jdbc:mysql://18.234.83.132:3306/travelsystem";
+    // JDBC connection information
+    public static final String SQLURL = "jdbc:sqlserver://travelsystemserver.database.windows.net:1433;database=travelsystemdb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
-    public static final String SQLURL = "jdbc:mysql://localhost:3306/travelsystem";
+//     Azure SQL credentials
+    public static final String SQLUSER = "traveladmin@travelsystemserver";
 
-    public static final String SQLUSER = "root";
+    public static final String SQLPASS = "root@123";
 
-    public static final String SQLPASS = "Zeba_b38";
+
+//    public static final String SQLURL = "jdbc:mysql://localhost:3306/travelsystem";
+//
+//    public static final String SQLUSER = "root";
+//
+//    public static final String SQLPASS = "Zeba_b38";
+
 }

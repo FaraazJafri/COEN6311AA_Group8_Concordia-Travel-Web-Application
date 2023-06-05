@@ -4,6 +4,7 @@ import com.example.coen_mp_concordiatravelwebapplication.dataaccess.*;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
+import com.example.coen_mp_concordiatravelwebapplication.models.userModels.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,17 +38,26 @@ public class BookPackage extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-
+        HttpSession session = request.getSession();
         // Get all the travel packages
         List<TravelPackage> travelPackages = packageDAO.getAllPackages();
-        List<Customer> customers = customerDAO.getAllCustomers();
-        List<Booking> bookings = new ArrayList<>();
+
+        List<User> customers = new ArrayList<>();
+        if ("Admin".equals(session.getAttribute("role"))) {
+            // Retrieve the list of customers from the database
+            customers = userDAO.getOnlyCustomers();
+        }
+        if ("Agent".equals(session.getAttribute("role"))) {
+            // Retrieve the list of customers from the database
+            String customerUsername = (String) session.getAttribute("username");
+            String userId = String.valueOf(userDAO.getID(customerUsername));
+            customers = userDAO.getLinkedCustomers(userId);
+        }
         request.setAttribute("travelPackages", travelPackages);
         request.setAttribute("customers", customers);
 
         // Forward the request to the JSP page
         request.getRequestDispatcher("bookapackage.jsp").forward(request, response);
-
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -66,9 +79,19 @@ public class BookPackage extends HttpServlet {
         }
         String departureDate = request.getParameter("departureDate");
 
+        // Convert departure and arrival strings to timestamps
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        Timestamp departure = null;
+        try {
+            departure = new Timestamp(inputDateFormat.parse(departureDate).getTime());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
         String bookingId = generateBookingId();
 
-        bookingDAO.saveBooking(bookingId, packageIdToBook, customerIdToBook, departureDate);
+        bookingDAO.saveBooking(bookingId, packageIdToBook, customerIdToBook, departure);
         List<Booking> bookings = bookingDAO.getAllBookings();
         request.setAttribute("bookings", bookings);
 

@@ -1,6 +1,7 @@
 package com.example.coen_mp_concordiatravelwebapplication.dataaccess;
 
 import com.example.coen_mp_concordiatravelwebapplication.config.CONFIG;
+import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer;
 
 import java.sql.*;
@@ -17,7 +18,7 @@ public class CustomerDAOImpl implements CustomerDAO {
         String password = CONFIG.SQLPASS;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +65,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public List<Customer> getAllCustomers() {
         List<Customer> customers = new ArrayList<>();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -97,4 +98,105 @@ public class CustomerDAOImpl implements CustomerDAO {
         }
         return customers;
     }
+
+    @Override
+    public Customer getSelectedCustomer(String customerId) {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+            Statement statement = connection.createStatement();
+
+            // Retrieve customer bookings from the database for the selected customer
+            String selectQuery = "SELECT * " +
+                    "FROM bookings AS b " +
+                    "JOIN customer AS c ON b.customerId = c.customerId " +
+                    "WHERE b.customerId = '" + customerId + "'";
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+
+            Customer customer = null;
+            if (resultSet.next()) {
+                String firstName = resultSet.getString("firstName");
+                String lastName = resultSet.getString("lastName");
+                String phoneNumber = resultSet.getString("phoneNumber");
+                int age = resultSet.getInt("age");
+                String gender = resultSet.getString("gender");
+                String emailId = resultSet.getString("emailId");
+
+                customer = new Customer(customerId, firstName, lastName, phoneNumber, age, gender, emailId);
+
+            }
+
+            return customer;
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public List<Booking> getSeletedCustomerBookings(String customerId) {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        List<Booking> customerBookings = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+            Statement statement = connection.createStatement();
+
+            // Retrieve customer bookings from the database for the selected customer
+            String selectQuery = "SELECT * " +
+                    "FROM bookings AS b " +
+                    "JOIN customer AS c ON b.customerId = c.customerId " +
+                    "WHERE b.customerId = '" + customerId + "'";
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+
+            while (resultSet.next()) {
+                String bookingId = resultSet.getString("bookingId");
+                String packageId = resultSet.getString("packageId");
+                Timestamp departureDate = resultSet.getTimestamp("departureDate");
+
+                // Create a new Booking object
+                Booking booking = new Booking(bookingId, packageId, customerId, departureDate);
+                customerBookings.add(booking);
+            }
+            return customerBookings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean linkCustomerToAgent(int customerId, int agentId) {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Example implementation:
+        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+
+            // Prepare the SQL statement to link the customer to the agent
+            String sql = "INSERT INTO agent_customer_link (agent_id, customer_id) VALUES (?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, agentId);
+            statement.setInt(2, customerId);
+
+            // Execute the SQL statement
+            int rowsAffected = statement.executeUpdate();
+
+            // Return true if at least one row was affected (successful linking), otherwise false
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle any exceptions or log the
+        }
+        return false;
+    }
+
 }

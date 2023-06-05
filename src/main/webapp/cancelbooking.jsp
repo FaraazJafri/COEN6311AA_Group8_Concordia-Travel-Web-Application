@@ -1,11 +1,21 @@
 <%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking" %>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.userModels.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html>
 <head>
+  <style>
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
   <link rel="stylesheet" type="text/css" href="css/showbookings.css">
   <title>Cancel Booking</title>
 </head>
@@ -15,21 +25,33 @@
 
 <h2>Customer Bookings</h2>
 
+<% String message = (String) request.getAttribute("message"); %>
+<% if (message != null) { %>
+<% if (message.equals("Your Booking has been successfully cancelled!")) { %>
+<p class="success"><%= message %>
+</p>
+<% } else { %>
+<p class="error"><%= message %>
+</p>
+<% } %>
+<% } %>
+
+<% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
 <form action="CustomerBookingsServlet" method="POST">
   <label for="customerId">Select a Customer:</label>
   <select id="customerId" name="customerId">
     <option value="" selected>-- Select Customer --</option>
-    <% List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+    <% List<User> customers = (List<User>) request.getAttribute("customers");
       if (customers != null && !customers.isEmpty()) {
-        for (Customer customer : customers) { %>
-    <option value="<%= customer.getCustomerId() %>"><%= customer.getFirstName() %> <%= customer.getLastName() %></option>
+        for (User customer : customers) { %>
+    <option value="<%= customer.getUserId() %>"><%= customer.getFirstName() %> <%= customer.getLastName() %></option>
     <% }
     } %>
   </select>
   <input type="hidden" name="condition" value="Cancel">
   <input type="submit" value="Get Customer Bookings">
 </form>
-
+<% } %>
 <hr>
 
 <% String selectedCustomer = (String) request.getAttribute("selectedCustomer");
@@ -46,7 +68,7 @@
       <th>Booking ID</th>
       <th>Package ID</th>
       <th>Departure Date</th>
-      <th>Action</th> <!-- Added column for cancellation action -->
+      <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -68,7 +90,7 @@
   </table>
 </div>
 <% } else { %>
-<p>No bookings found for the selected customer.</p>
+<p>No bookings found.</p>
 <% } %>
 </body>
 </html>

@@ -1,11 +1,5 @@
 package com.example.coen_mp_concordiatravelwebapplication.presentation.controllers;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAO;
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAOImpl;
 import jakarta.servlet.ServletException;
@@ -13,10 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-import com.example.coen_mp_concordiatravelwebapplication.config.CONFIG;
-import com.example.coen_mp_concordiatravelwebapplication.models.userModels.User;
+import java.io.IOException;
 
 @WebServlet(name = "ResetPasswordServlet", value = "/resetpassword")
 public class ResetPasswordServlet extends HttpServlet {

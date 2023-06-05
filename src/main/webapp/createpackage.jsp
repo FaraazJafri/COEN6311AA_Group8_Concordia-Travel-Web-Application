@@ -221,7 +221,7 @@
         </div>
         <button type="button" id="addActivity">Add Activity</button>
 
-        <input type="submit" value="Create Package">
+        <input type="submit" value="Save Package">
     </div>
 
 </form>

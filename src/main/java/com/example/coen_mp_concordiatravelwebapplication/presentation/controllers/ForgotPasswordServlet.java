@@ -1,18 +1,15 @@
 package com.example.coen_mp_concordiatravelwebapplication.presentation.controllers;
 
-import java.io.IOException;
-import java.sql.*;
-
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAO;
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAOImpl;
+import com.example.coen_mp_concordiatravelwebapplication.models.userModels.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.example.coen_mp_concordiatravelwebapplication.config.CONFIG;
-import com.example.coen_mp_concordiatravelwebapplication.models.userModels.User;
+import java.io.IOException;
 
 @WebServlet(name = "ForgotPasswordServlet", value = "/forgotpassword")
 public class ForgotPasswordServlet extends HttpServlet {

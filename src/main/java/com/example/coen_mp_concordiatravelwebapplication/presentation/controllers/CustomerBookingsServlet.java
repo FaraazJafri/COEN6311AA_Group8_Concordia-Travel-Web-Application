@@ -3,6 +3,7 @@ package com.example.coen_mp_concordiatravelwebapplication.presentation.controlle
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.*;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer;
+import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
 import com.example.coen_mp_concordiatravelwebapplication.models.userModels.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,8 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "CancelBookingServlet", value = "/CancelBookingServlet")
-public class CancelBookingServlet extends HttpServlet {
+@WebServlet("/CustomerBookingsServlet")
+public class CustomerBookingsServlet extends HttpServlet {
     private PackageDAO packageDAO;
     private CustomerDAO customerDAO;
     private UserDAO userDAO;
@@ -62,27 +63,37 @@ public class CancelBookingServlet extends HttpServlet {
             String userId = String.valueOf(userDAO.getID(customerUsername));
             customers = userDAO.getLinkedCustomers(userId);
         }
-
         // Set the list of customers as a request attribute
         request.setAttribute("customers", customers);
 
-        // Forward the request to the JSP page
-        request.getRequestDispatcher("cancelbooking.jsp").forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String customerId = request.getParameter("customerId");
-        String bookingId = request.getParameter("bookingId");
-        int rowsDeleted = bookingDAO.cancelBooking(customerId, bookingId);
-
-        if (rowsDeleted > 0) {
-            request.setAttribute("message", "Your Booking has been successfully cancelled!");
-            doGet(request,response);
+        String condition = request.getParameter("condition");
+        if (condition != null && condition.equals("Cancel")) {
+            request.getRequestDispatcher("cancelbooking.jsp").forward(request, response);
+        } else if (condition != null && condition.equals("Modify")) {
+            List<TravelPackage> travelPackages = packageDAO.getAllPackages();
+            request.setAttribute("travelPackages", travelPackages);
+            request.getRequestDispatcher("modifybooking.jsp").forward(request, response);
         } else {
-
-            response.sendRedirect("CustomerBookingsServlet?customerId=" + customerId + "&error=1");
+            request.getRequestDispatcher("bookings.jsp").forward(request, response);
         }
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        String customerId = request.getParameter("customerId");
+        Customer customer = customerDAO.getSelectedCustomer(customerId);
+
+        if (customer != null) {
+            String firstName = customer.getFirstName();
+            String lastName = customer.getLastName();
+
+            String fullName = firstName + " " + lastName;
+
+            request.setAttribute("selectedCustomer", fullName);
+        }
+        List<Booking> customerBookings = customerDAO.getSeletedCustomerBookings(customerId);
+        request.setAttribute("customerBookings", customerBookings);
+
+        doGet(request, response);
+    }
 }

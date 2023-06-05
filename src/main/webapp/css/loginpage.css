@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", helvetica, arial;
+    background-color: lightgrey;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+#logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#logo {
+    max-width: 150px; /* Adjust the max-width to your desired size */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensures the image fits inside the specified dimensions */
+    clip-path: inset(0 0 20% 0); /* Crop the logo from below by 20% */
+}
+
+
+#login-container {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#login-container h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+#login-container label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#login-container input[type="text"],
+#login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#login-container input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#login-container input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#login-container p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#login-container a {
+    color: #007bff;
+}
+
+#login-container a:hover {
+    text-decoration: underline;
+}

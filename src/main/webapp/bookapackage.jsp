@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.packageModels.*" %>
 <%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer" %>
+<%@ page import="com.example.coen_mp_concordiatravelwebapplication.models.userModels.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -10,6 +11,20 @@
 <body>
 
 <jsp:include page="menu.jsp" />
+
+<h2>Make a Booking</h2>
+
+<form action="BookPackageServlet" method="POST">
+    <label for="packageId">Package ID:</label>
+    <input type="text" id="packageId" name="packageId" required><br><br>
+    <% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
+    <label for="customerId">Customer ID:</label>
+    <input type="text" id="customerId" name="customerId" required><br><br>
+    <% } %>
+    <label for="departureDate">Departure Date:</label>
+    <input type="datetime-local" id="departureDate" name="departureDate" required><br><br>
+    <input type="submit" value="Book Package">
+</form>
 
 <h2>Available Travel Packages</h2>
 
@@ -104,17 +119,17 @@
     </tr>
     </thead>
     <tbody>
-    <% List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+    <% List<User> customers = (List<User>) request.getAttribute("customers");
         if (customers != null && !customers.isEmpty()) {
-            for (Customer customer : customers) { %>
+            for (User customer : customers) { %>
     <tr>
-        <td><%= customer.getCustomerId() %></td>
+        <td><%= customer.getUserId() %></td>
         <td><%= customer.getFirstName() %></td>
         <td><%= customer.getLastName() %></td>
         <td><%= customer.getAge() %></td>
         <td><%= customer.getGender() %></td>
         <td><%= customer.getPhoneNumber() %></td>
-        <td><%= customer.getEmailId() %></td>
+        <td><%= customer.getEmail() %></td>
     </tr>
     <%      }
     } else { %>
@@ -125,18 +140,6 @@
     </tbody>
 </table>
 <% } %>
-<h2>Make a Booking</h2>
 
-<form action="BookPackageServlet" method="POST">
-    <label for="packageId">Package ID:</label>
-    <input type="text" id="packageId" name="packageId" required><br><br>
-    <% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
-    <label for="customerId">Customer ID:</label>
-    <input type="text" id="customerId" name="customerId" required><br><br>
-    <% } %>
-    <label for="departureDate">Departure Date:</label>
-    <input type="datetime-local" id="departureDate" name="departureDate" required><br><br>
-    <input type="submit" value="Book Package">
-</form>
 </body>
 </html>
