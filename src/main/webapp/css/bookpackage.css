@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -17,8 +18,9 @@ body {
 
 #container {
     position: relative;
-    width: 940px;
+    /*width: 940px;*/
     margin-top: 30px;
+    /*float: left;*/
 }
 
 #welcome {
@@ -174,8 +176,6 @@ h1:before {
     border-bottom: dotted 1px rgba(255,255,255,.15);
     background: rgba(0,223,252,.02);
 }
-
-
 /* Additional CSS for the available travel packages section */
 h2 {
     margin-top: 30px;

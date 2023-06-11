@@ -199,4 +199,51 @@ public class CustomerDAOImpl implements CustomerDAO {
         return false;
     }
 
+    @Override
+    public List<Customer> getCustomersByAgentId(int agentId) {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        List<Customer> agentCustomers = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+            Statement statement = connection.createStatement();
+
+            // First, retrieve the customer IDs for the selected agent
+            String customerIdsQuery = "SELECT customer_id FROM agent_customer_link WHERE agent_id = " + agentId;
+            ResultSet customerIdsResultSet = statement.executeQuery(customerIdsQuery);
+
+            List<String> customerIds = new ArrayList<>();
+            while (customerIdsResultSet.next()) {
+                String customerId = customerIdsResultSet.getString("customer_id");
+                customerIds.add(customerId);
+            }
+
+            // Second, retrieve the customer details using the obtained customer IDs
+            for (String customerId : customerIds) {
+                String customerDetailsQuery = "SELECT * FROM customer WHERE customerId = '" + customerId + "'";
+                ResultSet resultSet = statement.executeQuery(customerDetailsQuery);
+
+                while (resultSet.next()) {
+                    String firstName = resultSet.getString("firstName");
+                    String lastName = resultSet.getString("lastName");
+                    String phoneNumber = resultSet.getString("phoneNumber");
+                    int age = resultSet.getInt("age");
+                    String gender = resultSet.getString("gender");
+                    String emailId = resultSet.getString("emailId");
+
+                    Customer customer = new Customer(customerId, firstName, lastName, phoneNumber, age, gender, emailId);
+                    agentCustomers.add(customer);
+                }
+            }
+
+            return agentCustomers;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

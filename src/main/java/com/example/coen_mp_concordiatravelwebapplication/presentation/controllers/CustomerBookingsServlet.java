@@ -93,6 +93,7 @@ public class CustomerBookingsServlet extends HttpServlet {
         }
         List<Booking> customerBookings = customerDAO.getSeletedCustomerBookings(customerId);
         request.setAttribute("customerBookings", customerBookings);
+        request.setAttribute("customerId",customerId);
 
         doGet(request, response);
     }

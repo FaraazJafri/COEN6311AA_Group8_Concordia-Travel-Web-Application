@@ -17,8 +17,9 @@ body {
 
 #container {
     position: relative;
-    width: 940px;
+    /*width: 940px;*/
     margin-top: 30px;
+    /*float: left;*/
 }
 
 #welcome {
@@ -174,7 +175,6 @@ h1:before {
     border-bottom: dotted 1px rgba(255,255,255,.15);
     background: rgba(0,223,252,.02);
 }
-
 /*Give the css for displaying the customer bookings*/
 h2 {
     margin-top: 30px;
@@ -184,7 +184,7 @@ form {
     margin-top: 20px;
     width: 400px;
     padding: 20px;
-    background-color: #f2f2f2;
+    background-color: white;
     border-radius: 5px;
 }
 
@@ -235,7 +235,7 @@ form input[type="submit"]:hover {
 }
 
 .customer-bookings th {
-    background-color: #f2f2f2;
+    background-color: #333;
     font-weight: bold;
 }
 

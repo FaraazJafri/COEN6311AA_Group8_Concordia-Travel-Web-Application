@@ -153,8 +153,8 @@
         <input type="text" id="packageName" name="packageName" required><br>
         <label for="packageDescription">Package Description:</label>
         <textarea id="packageDescription" name="packageDescription" required></textarea><br>
-        <label for="packagePrice">Package Price:</label>
-        <input type="number" id="packagePrice" name="packagePrice" step="0.01" required><br>
+<%--        <label for="packagePrice">Package Price:</label>--%>
+<%--        <input type="number" id="packagePrice" name="packagePrice" step="0.01" required><br>--%>
     </div>
 
     <!-- Flight Information -->

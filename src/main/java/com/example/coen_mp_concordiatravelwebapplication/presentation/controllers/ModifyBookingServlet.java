@@ -25,6 +25,7 @@ public class ModifyBookingServlet extends HttpServlet {
     private CustomerDAO customerDAO;
     private UserDAO userDAO;
     private BookingDAO bookingDAO;
+    private NotificationDAO notificationDAO;
 
     @Override
     public void init() throws ServletException {
@@ -34,6 +35,7 @@ public class ModifyBookingServlet extends HttpServlet {
         customerDAO = new CustomerDAOImpl();
         userDAO = new UserDAOImpl();
         bookingDAO = new BookingDAOImpl();
+        notificationDAO = new NotificationDAOImpl();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -96,6 +98,7 @@ public class ModifyBookingServlet extends HttpServlet {
         String bookingId = request.getParameter("bookingId");
         String packageId = request.getParameter("packageId");
         String departureDate = request.getParameter("departureDate");
+        String customerIdToModify = request.getParameter("customerId");
 
         // Convert departure and arrival strings to timestamps
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -115,6 +118,29 @@ public class ModifyBookingServlet extends HttpServlet {
             String message = "Your booking has been modified successfully!";
             request.setAttribute("heading", heading);
             request.setAttribute("message", message);
+
+            //Notification code
+            HttpSession session = request.getSession();
+            if ("Customer".equals(session.getAttribute("role"))) {
+                String username = (String) session.getAttribute("username");
+                String customerId = String.valueOf(userDAO.getID(username));
+                String messageForNotif = "The booking was successfully modified with the booking ID: " + bookingId;
+                notificationDAO.sendNotificationToUser(String.valueOf(customerId), messageForNotif);
+            }else if("Agent".equals(session.getAttribute("role"))){
+                String customerUsername = (String) session.getAttribute("username");
+                String customerIdOfAgent = String.valueOf(userDAO.getID(customerUsername));
+
+                User user = userDAO.getUserById(customerIdOfAgent);
+
+                String fullname = user.getFirstName() + " " + user.getLastName();
+
+                String messageForNotif = "Your agent: " + fullname +" has modified the booking with booking Id: " + bookingId;
+                notificationDAO.sendNotificationToUser(String.valueOf(customerIdToModify), messageForNotif);
+            }else if("Admin".equals(session.getAttribute("role"))){
+
+                String messageForNotif = "The Admin has modified the booking with booking Id: " + bookingId;
+                notificationDAO.sendNotificationToUser(String.valueOf(customerIdToModify), messageForNotif);
+            }
             request.getRequestDispatcher("modify_success.jsp").forward(request,response);
         } else {
             // Modification failed, redirect to an error page

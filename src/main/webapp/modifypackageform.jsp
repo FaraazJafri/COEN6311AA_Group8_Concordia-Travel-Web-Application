@@ -30,8 +30,8 @@
     <label for="description">Package Description:</label>
     <textarea id="description" name="description" class="form-field"><%= selectedPackage.getDescription() %></textarea>
 
-    <label for="price">Package Price:</label>
-    <input type="number" id="price" name="price" value="<%= selectedPackage.getPrice() %>" class="form-field">
+<%--    <label for="price">Package Price:</label>--%>
+<%--    <input type="number" id="price" name="price" value="<%= selectedPackage.getPrice() %>" class="form-field">--%>
 
     <h2>Flights:</h2>
     <ul>

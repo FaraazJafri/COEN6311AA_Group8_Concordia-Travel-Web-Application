@@ -25,6 +25,7 @@ public class BookPackage extends HttpServlet {
     private CustomerDAO customerDAO;
     private UserDAO userDAO;
     private BookingDAO bookingDAO;
+    private NotificationDAO notificationDAO;
 
     @Override
     public void init() throws ServletException {
@@ -34,6 +35,7 @@ public class BookPackage extends HttpServlet {
         customerDAO = new CustomerDAOImpl();
         userDAO = new UserDAOImpl();
         bookingDAO = new BookingDAOImpl();
+        notificationDAO = new NotificationDAOImpl();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -94,6 +96,26 @@ public class BookPackage extends HttpServlet {
         bookingDAO.saveBooking(bookingId, packageIdToBook, customerIdToBook, departure);
         List<Booking> bookings = bookingDAO.getAllBookings();
         request.setAttribute("bookings", bookings);
+
+        //Notification code
+        if ("Customer".equals(session.getAttribute("role"))) {
+            String message = "The booking was successful with the booking ID: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
+            notificationDAO.sendNotificationToUser(String.valueOf(customerID), message);
+        }else if("Agent".equals(session.getAttribute("role"))){
+            String customerUsername = (String) session.getAttribute("username");
+            customerID = userDAO.getID(customerUsername);
+
+            User user = userDAO.getUserById(String.valueOf(customerID));
+
+            String fullname = user.getFirstName() + " " + user.getLastName();
+
+            String message = "Your agent: " + fullname +" has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
+            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
+        }else if("Admin".equals(session.getAttribute("role"))){
+
+            String message = "The Admin has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
+            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
+        }
 
         request.getRequestDispatcher("createpackagesuccess.jsp").forward(request, response);
     }

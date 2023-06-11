@@ -33,6 +33,16 @@ public class TravelPackage {
         this.activities = new ArrayList<>();
     }
 
+    public TravelPackage(String packageId, String packageName, String packageDescription, double packagePrice) {
+        this.packageId = packageId;
+        this.name = packageName;
+        this.description = packageDescription;
+        this.price = packagePrice;
+        this.flights = new ArrayList<>();
+        this.hotels = new ArrayList<>();
+        this.activities = new ArrayList<>();
+    }
+
 
     public String getPackageId() {
         return packageId;

@@ -19,6 +19,12 @@ public class Booking {
         this.departureDate = departureDate;
     }
 
+    public Booking(String bookingId, String customerId, String packageId) {
+        this.bookingId = bookingId;
+        this.customerId = customerId;
+        this.packageId = packageId;
+    }
+
     public String getBookingId() {
         return bookingId;
     }

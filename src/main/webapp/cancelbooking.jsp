@@ -44,7 +44,7 @@
     <% List<User> customers = (List<User>) request.getAttribute("customers");
       if (customers != null && !customers.isEmpty()) {
         for (User customer : customers) { %>
-    <option value="<%= customer.getUserId() %>"><%= customer.getFirstName() %> <%= customer.getLastName() %></option>
+    <option value="<%= customer.getUserId() %>"> Id:<%= customer.getUserId() %> Name: <%= customer.getFirstName() %> <%= customer.getLastName() %>
     <% }
     } %>
   </select>

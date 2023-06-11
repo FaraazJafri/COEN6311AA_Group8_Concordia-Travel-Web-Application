@@ -33,6 +33,19 @@
 <% } %>
 
 <form action="LinkCustomerServlet" method="POST">
+    <% if (session.getAttribute("role").equals("Admin")) { %>
+    <label for="agentId">Select an Agent:</label>
+    <select id="agentId" name="agentId">
+        <option value="" selected>-- Select Agent --</option>
+        <% List<User> agents = (List<User>) request.getAttribute("agents");
+            if (agents != null && !agents.isEmpty()) {
+                for (User agent : agents) { %>
+        <option value="<%= agent.getUserId() %>"><%= agent.getUserId() %> - <%= agent.getFirstName() %> <%= agent.getLastName() %></option>
+        <% }
+        } %>
+    </select>
+    <% } %>
+
     <label for="customerId">Select a Customer:</label>
     <select id="customerId" name="customerId">
         <option value="" selected>-- Select Customer --</option>
@@ -45,7 +58,7 @@
         } %>
     </select>
     <input type="hidden" name="condition" value="View">
-    <input type="submit" value="Link Customer to your Profile">
+    <input type="submit" value="Link Customer to Profile">
 </form>
 </body>
 </html>

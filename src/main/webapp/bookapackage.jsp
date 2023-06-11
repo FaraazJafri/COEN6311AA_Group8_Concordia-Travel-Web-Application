@@ -36,7 +36,7 @@
         <th>Package ID</th>
         <th>Name</th>
         <th>Description</th>
-        <th>Price</th>
+        <th>Total Price</th>
         <th>Flights</th>
         <th>Hotels</th>
         <th>Activities</th>

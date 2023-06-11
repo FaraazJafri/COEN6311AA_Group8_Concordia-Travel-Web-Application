@@ -22,6 +22,8 @@ public class CancelBookingServlet extends HttpServlet {
     private UserDAO userDAO;
     private BookingDAO bookingDAO;
 
+    private NotificationDAO notificationDAO;
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -30,6 +32,7 @@ public class CancelBookingServlet extends HttpServlet {
         customerDAO = new CustomerDAOImpl();
         userDAO = new UserDAOImpl();
         bookingDAO = new BookingDAOImpl();
+        notificationDAO = new NotificationDAOImpl();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -77,7 +80,31 @@ public class CancelBookingServlet extends HttpServlet {
 
         if (rowsDeleted > 0) {
             request.setAttribute("message", "Your Booking has been successfully cancelled!");
-            doGet(request,response);
+
+            //Notification code
+            HttpSession session = request.getSession();
+            if ("Customer".equals(session.getAttribute("role"))) {
+                String message = "The booking was successfully deleted with the booking ID: " + bookingId;
+                notificationDAO.sendNotificationToUser(String.valueOf(customerId), message);
+            }else if("Agent".equals(session.getAttribute("role"))){
+                String customerUsername = (String) session.getAttribute("username");
+                String customerIdOfAgent = String.valueOf(userDAO.getID(customerUsername));
+
+                User user = userDAO.getUserById(customerIdOfAgent);
+
+                String fullname = user.getFirstName() + " " + user.getLastName();
+
+                String message = "Your agent: " + fullname +" has cancelled the booking with booking Id: " + bookingId;
+                notificationDAO.sendNotificationToUser(String.valueOf(customerId), message);
+            }else if("Admin".equals(session.getAttribute("role"))){
+
+                String message = "The Admin has cancelled the booking with booking Id: " + bookingId;
+                notificationDAO.sendNotificationToUser(String.valueOf(customerId), message);
+            }
+
+            request.setAttribute("heading","Cancel Booking");
+            request.setAttribute("message","Your Booking has been successfully cancelled!!");
+            request.getRequestDispatcher("modify_success.jsp").forward(request,response);
         } else {
 
             response.sendRedirect("CustomerBookingsServlet?customerId=" + customerId + "&error=1");

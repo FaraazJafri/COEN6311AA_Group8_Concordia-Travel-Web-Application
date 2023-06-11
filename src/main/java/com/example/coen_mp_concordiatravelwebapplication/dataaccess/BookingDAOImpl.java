@@ -95,7 +95,11 @@ public class BookingDAOImpl implements BookingDAO {
 
     @Override
     public Boolean modifyBooking(String bookingId, String packageId, Timestamp departureDate) {
-
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
             String updateQuery = "UPDATE bookings SET packageId = ?, departureDate = ? WHERE bookingId = ?";
             PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
@@ -111,5 +115,58 @@ public class BookingDAOImpl implements BookingDAO {
             e.printStackTrace();
         }
         return true;
+    }
+
+    @Override
+    public List<Booking> getBookingsByAgentId(int agentId) {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        List<Booking> bookings = new ArrayList<>();
+
+        // Query to retrieve customer IDs by agent ID
+        String customerQuery = "SELECT customer_id FROM agent_customer_link WHERE agent_id = ?";
+
+        // Query to retrieve bookings based on customer IDs
+        String bookingQuery = "SELECT bookingId, packageId, customerId, departureDate FROM bookings WHERE customerId = ?";
+
+        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+            PreparedStatement customerStatement = connection.prepareStatement(customerQuery);
+            customerStatement.setInt(1, agentId);
+            ResultSet customerResultSet = customerStatement.executeQuery();
+
+            // Iterate over the customer IDs
+            while (customerResultSet.next()) {
+                String customerId = customerResultSet.getString("customer_id");
+
+                // Execute the second query to retrieve bookings for each customer ID
+                PreparedStatement bookingStatement = connection.prepareStatement(bookingQuery);
+                bookingStatement.setString(1, customerId);
+                ResultSet bookingResultSet = bookingStatement.executeQuery();
+
+                // Process the bookings for the customer ID
+                while (bookingResultSet.next()) {
+                    String bookingId = bookingResultSet.getString("bookingId");
+                    String packageId = bookingResultSet.getString("packageId");
+                    Timestamp departureDate = bookingResultSet.getTimestamp("departureDate");
+
+                    // Create a Booking object and add it to the list
+                    Booking booking = new Booking(bookingId, packageId, customerId, departureDate);
+                    bookings.add(booking);
+                }
+
+                bookingResultSet.close();
+                bookingStatement.close();
+            }
+
+            customerResultSet.close();
+            customerStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return bookings;
     }
 }

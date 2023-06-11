@@ -12,7 +12,7 @@
   <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
 </div>
 
-<h1>Travel Packages</h1>
+<h1>Concordia Travel Booking System</h1>
 
 <div id="login-container">
   <h2>Login</h2>

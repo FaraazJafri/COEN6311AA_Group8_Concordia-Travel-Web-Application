@@ -17,7 +17,7 @@
     <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
 </div>
 
-<h1>Travel Packages</h1>
+<h1>Concordia Travel Booking System</h1>
 <div id="signup-container">
 <form action="signup" method="post">
     <label for="firstName">First Name:</label>

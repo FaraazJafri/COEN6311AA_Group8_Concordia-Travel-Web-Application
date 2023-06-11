@@ -17,8 +17,9 @@ body {
 
 #container {
     position: relative;
-    width: 940px;
+    /*width: 940px;*/
     margin-top: 30px;
+    /*float: left;*/
 }
 
 #welcome {

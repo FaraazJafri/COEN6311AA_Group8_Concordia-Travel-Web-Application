@@ -26,7 +26,7 @@
       <% List<User> customers = (List<User>) request.getAttribute("customers");
         if (customers != null && !customers.isEmpty()) {
           for (User customer : customers) { %>
-      <option value="<%= customer.getUserId() %>"><%= customer.getFirstName() %> <%= customer.getLastName() %>
+      <option value="<%= customer.getUserId() %>"> Id:<%= customer.getUserId() %> Name: <%= customer.getFirstName() %> <%= customer.getLastName() %>
       </option>
       <% }
       } %>
@@ -91,6 +91,7 @@
     <input type="text" id="packageId" name="packageId" required><br><br>
     <label for="departureDate">Departure Date:</label>
     <input type="datetime-local" id="departureDate" name="departureDate" required><br><br>
+    <input type="hidden" id="customerIdToModify" name="customerId" value="<%= bookings != null && !bookings.isEmpty() ? bookings.get(0).getCustomerId() : "" %>">
     <input type="submit" value="Modify Booking">
   </form>
 </div>

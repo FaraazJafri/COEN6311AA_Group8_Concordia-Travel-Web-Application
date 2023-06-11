@@ -6,4 +6,12 @@
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
+    <servlet>
+        <servlet-name>NotificationsServlet</servlet-name>
+        <servlet-class>com.example.coen_mp_concordiatravelwebapplication.presentation.controllers.NotificationsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NotificationsServlet</servlet-name>
+        <url-pattern>/notifications</url-pattern>
+    </servlet-mapping>
 </web-app>

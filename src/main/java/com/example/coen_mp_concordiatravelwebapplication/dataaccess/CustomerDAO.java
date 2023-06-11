@@ -16,4 +16,6 @@ public interface CustomerDAO {
 
 
     boolean linkCustomerToAgent(int parseInt, int agentId);
+    List<Customer> getCustomersByAgentId(int agentId);
+
 }

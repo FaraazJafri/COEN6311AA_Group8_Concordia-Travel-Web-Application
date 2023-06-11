@@ -40,7 +40,9 @@ public class ModifyPackageServlet extends HttpServlet {
 
         String name = request.getParameter("name");
         String description = request.getParameter("description");
-        double price = Double.parseDouble(request.getParameter("price"));
+
+        // Calculate the total price by summing the prices of flights, hotels, and activities
+        double totalPrice = calculateTotalPrice(request);
 
         // Get the updated flights, hotels, and activities information from the request parameters
         String[] flightIds = request.getParameterValues("flights");
@@ -62,8 +64,7 @@ public class ModifyPackageServlet extends HttpServlet {
         TravelPackage travelPackage = new TravelPackage();
         travelPackage.setName(name);
         travelPackage.setDescription(description);
-        travelPackage.setPrice(price);
-
+        travelPackage.setPrice(totalPrice);
 
         for (int i = 0; i < flightIds.length; i++) {
             String flightId = flightIds[i];
@@ -94,7 +95,6 @@ public class ModifyPackageServlet extends HttpServlet {
             travelPackage.addFlight(flight);
         }
 
-
         for (int i = 0; i < hotelIds.length; i++) {
             String hotelId = hotelIds[i];
             String hotelName = hotelNames[i];
@@ -108,30 +108,61 @@ public class ModifyPackageServlet extends HttpServlet {
             travelPackage.addHotel(hotel);
         }
 
-
         for (int i = 0; i < activityIds.length; i++) {
             String activityId = activityIds[i];
             String activityName = activityNames[i];
             String activityDescription = activityDescriptions[i];
-            double acitivityPrice = Double.parseDouble(activityPrices[i]);
+            double activityPrice = Double.parseDouble(activityPrices[i]);
 
             // Create a new Activity object with the extracted values
-            Activity activity = new Activity(activityId, activityName, activityDescription, acitivityPrice);
+            Activity activity = new Activity(activityId, activityName, activityDescription, activityPrice);
 
             // Add the Activity object to the list
             travelPackage.addActivity(activity);
         }
 
-
         Boolean modifyCompletion = packageDAO.modifyPackageDetails(packageId, travelPackage);
 
         if (modifyCompletion) {
             // Redirect to the success page after the modification is complete
-            response.sendRedirect("modify_success.jsp");
+
+            request.setAttribute("heading", "Modify Package Details");
+            request.setAttribute("message", "Package successfully modified.");
+            request.getRequestDispatcher("modify_success.jsp").forward(request, response);
         } else {
             request.setAttribute("errorMessage", "An error occurred while processing the request for modifying the package.");
             request.setAttribute("errorCode", 500);
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
+    }
+
+    private double calculateTotalPrice(HttpServletRequest request) {
+        double totalPrice = 0.0;
+
+        // Get the flight prices
+        String[] flightPrices = request.getParameterValues("prices");
+        if (flightPrices != null) {
+            for (String price : flightPrices) {
+                totalPrice += Double.parseDouble(price);
+            }
+        }
+
+        // Get the hotel prices
+        String[] hotelPrices = request.getParameterValues("hotelPrices");
+        if (hotelPrices != null) {
+            for (String price : hotelPrices) {
+                totalPrice += Double.parseDouble(price);
+            }
+        }
+
+        // Get the activity prices
+        String[] activityPrices = request.getParameterValues("activityPrices");
+        if (activityPrices != null) {
+            for (String price : activityPrices) {
+                totalPrice += Double.parseDouble(price);
+            }
+        }
+
+        return totalPrice;
     }
 }

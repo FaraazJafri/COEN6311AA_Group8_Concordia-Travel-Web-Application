@@ -1,7 +1,10 @@
 package com.example.coen_mp_concordiatravelwebapplication.presentation.controllers;
 
+import com.example.coen_mp_concordiatravelwebapplication.dataaccess.NotificationDAO;
+import com.example.coen_mp_concordiatravelwebapplication.dataaccess.NotificationDAOImpl;
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAO;
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAOImpl;
+import com.example.coen_mp_concordiatravelwebapplication.models.notficationModels.Notification;
 import com.example.coen_mp_concordiatravelwebapplication.models.userModels.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,17 +14,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
     private UserDAO userDAO;
 
+    private NotificationDAO notificationDAO;
     @Override
     public void init() throws ServletException {
         super.init();
         // Initialize the UserDAO implementation
         userDAO = new UserDAOImpl();
+        notificationDAO = new NotificationDAOImpl();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -45,8 +51,12 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("role", user.getRole());
             session.setAttribute("fullName", fullName);
 
+            String userId = String.valueOf(userDAO.getID(username));
+
+            List<Notification> notifications = notificationDAO.getNotificationsByUserId(userId);
+            request.setAttribute("notifications", notifications);
             // Redirect to the home page
-            response.sendRedirect("homepage.jsp");
+            request.getRequestDispatcher("homepage.jsp").forward(request, response);
         } else {
             // Authentication failed, display an error message
             request.setAttribute("errorMessage", "Invalid username or password.");
