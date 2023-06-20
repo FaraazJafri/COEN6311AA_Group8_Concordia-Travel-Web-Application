@@ -1,9 +1,9 @@
 package com.example.coen_mp_concordiatravelwebapplication.presentation.controllers;
 
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.*;
-import com.example.coen_mp_concordiatravelwebapplication.dataaccess.Reports;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
+import com.example.coen_mp_concordiatravelwebapplication.models.reportsModels.Reports;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
