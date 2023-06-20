@@ -42,6 +42,7 @@ public class RemoveCustomPackage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get the package ID parameter from the request
         String packageId = request.getParameter("packageId");
+        packageId = String.valueOf(Integer.parseInt(packageId)+499);
         if (customPackageDAO.deletePackage(packageId)) {
             request.setAttribute("heading", "Custom Package Deleted:");
             request.setAttribute("message", "Your package is deleted successfully!!");

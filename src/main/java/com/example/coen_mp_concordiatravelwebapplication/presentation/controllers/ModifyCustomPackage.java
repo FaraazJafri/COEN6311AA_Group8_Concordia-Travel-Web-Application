@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ModifyCustomPackage")
+@WebServlet(name = "ModifyCustomPackage", value = "/ModifyCustomPackage")
 public class ModifyCustomPackage extends HttpServlet {
     private UserDAO userDAO;
     private CustomPackageDAO customPackageDAO;
@@ -41,7 +41,9 @@ public class ModifyCustomPackage extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String packageId = request.getParameter("packageId");
+
         request.setAttribute("packageId", packageId);
-        request.getRequestDispatcher("ModifyCustomPackageForm").forward(request, response);
+        String url = request.getContextPath() + "/ModifyCustomPackageForm?packageId=" + packageId;
+        response.sendRedirect(url);
     }
 }

@@ -12,6 +12,9 @@
 </head>
 <body>
 <form action="ModifyCustomPackageForm" method="post">
+    <%String packageId = request.getParameter("packageId");%>
+    <input type="hidden" id="packageId" name="packageId" value="${packageId}">
+
     <label for="activityIds">Activity IDs (comma-separated):</label>
     <input type="text" id="activityIds" name="activityIds"><br><br>
     <label for="flightIds">Flight IDs (comma-separated):</label>
@@ -38,10 +41,14 @@
     <tbody>
     <% for (Activity activity : activities) { %>
     <tr>
-        <td><%= activity.getActivityId() %></td>
-        <td><%= activity.getName() %></td>
-        <td><%= activity.getDescription() %></td>
-        <td><%= activity.getPrice() %></td>
+        <td><%= activity.getActivityId() %>
+        </td>
+        <td><%= activity.getName() %>
+        </td>
+        <td><%= activity.getDescription() %>
+        </td>
+        <td><%= activity.getPrice() %>
+        </td>
     </tr>
     <% } %>
     </tbody>
@@ -63,11 +70,16 @@
     <tbody>
     <% for (Flight flight : flights) { %>
     <tr>
-        <td><%= flight.getFlightId() %></td>
-        <td><%= flight.getAirline() %></td>
-        <td><%= flight.getArrival() %></td>
-        <td><%= flight.getDeparture() %></td>
-        <td><%= flight.getPrice() %></td>
+        <td><%= flight.getFlightId() %>
+        </td>
+        <td><%= flight.getAirline() %>
+        </td>
+        <td><%= flight.getArrival() %>
+        </td>
+        <td><%= flight.getDeparture() %>
+        </td>
+        <td><%= flight.getPrice() %>
+        </td>
     </tr>
     <% } %>
     </tbody>
@@ -88,10 +100,14 @@
     <tbody>
     <% for (Hotel hotel : hotels) { %>
     <tr>
-        <td><%= hotel.getHotelId() %></td>
-        <td><%= hotel.getName() %></td>
-        <td><%= hotel.getLocation() %></td>
-        <td><%= hotel.getPrice() %></td>
+        <td><%= hotel.getHotelId() %>
+        </td>
+        <td><%= hotel.getName() %>
+        </td>
+        <td><%= hotel.getLocation() %>
+        </td>
+        <td><%= hotel.getPrice() %>
+        </td>
     </tr>
     <% } %>
     </tbody>

@@ -22,6 +22,4 @@ public interface PackageDAO {
     Boolean modifyPackageDetails(String packageId, TravelPackage travelPackage) throws ServletException;
 
     Boolean removePackage(String packageId) throws ServletException;
-
-    boolean addCustomPackage(String userID, String activityId, String flightId, String hotelId);
 }

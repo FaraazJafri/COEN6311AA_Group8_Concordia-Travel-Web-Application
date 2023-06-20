@@ -18,4 +18,8 @@ public interface CustomPackageDAO {
     List<TravelPackage> retrieveUserPackages(String userID);
 
     boolean deletePackage(String packageId);
+
+    boolean addCustomPackage(String userID, String activityIds, String flightIds, String hotelIds);
+
+    boolean modifyCustomPackage(String userID, String packageId, String activityIds, String flightIds, String hotelIds);
 }

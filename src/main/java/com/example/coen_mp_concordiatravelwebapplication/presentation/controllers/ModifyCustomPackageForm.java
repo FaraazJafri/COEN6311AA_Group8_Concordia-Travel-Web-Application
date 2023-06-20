@@ -1,9 +1,9 @@
 package com.example.coen_mp_concordiatravelwebapplication.presentation.controllers;
 
-import com.example.coen_mp_concordiatravelwebapplication.dataaccess.CustomPackageDAO;
-import com.example.coen_mp_concordiatravelwebapplication.dataaccess.CustomPackageDAOImpl;
-import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAO;
-import com.example.coen_mp_concordiatravelwebapplication.dataaccess.UserDAOImpl;
+import com.example.coen_mp_concordiatravelwebapplication.dataaccess.*;
+import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Activity;
+import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Flight;
+import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Hotel;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,41 +15,59 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/ModifyCustomPackageForm")
+import static java.lang.Integer.parseInt;
+
+@WebServlet(name = "ModifyCustomPackageForm", value = "/ModifyCustomPackageForm")
 public class ModifyCustomPackageForm extends HttpServlet {
+    private ActivityDAO activityDAO;
+    private FlightDAO flightDAO;
+    private HotelDAO hotelDAO;
     private UserDAO userDAO;
+
     private CustomPackageDAO customPackageDAO;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        userDAO = new UserDAOImpl();
+        // Initialize the DAO implementations
+        activityDAO = new ActivityDAOImpl();
+        flightDAO = new FlightDAOImpl();
+        hotelDAO = new HotelDAOImpl();
         customPackageDAO = new CustomPackageDAOImpl();
+        userDAO = new UserDAOImpl();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String customerUsername = (String) session.getAttribute("username");
-        String userID = String.valueOf(userDAO.getID(customerUsername));
+        List<Activity> activities = activityDAO.getAllActivities();
+        List<Flight> flights = flightDAO.getAllFlights();
+        List<Hotel> hotels = hotelDAO.getAllHotels();
 
-        List<TravelPackage> userPackages = customPackageDAO.retrieveUserPackages(userID);
         String packageId = request.getParameter("packageId");
         request.setAttribute("packageId", packageId);
-        request.setAttribute("userPackages", userPackages);
+        request.setAttribute("activities", activities);
+        request.setAttribute("flights", flights);
+        request.setAttribute("hotels", hotels);
         request.getRequestDispatcher("modifycustompackageform.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String packageId = request.getParameter("packageId");
+        packageId = String.valueOf(Integer.parseInt(packageId)+499);
         String activityIds = request.getParameter("activityIds");
         String flightIds = request.getParameter("flightIds");
         String hotelIds = request.getParameter("hotelIds");
         HttpSession session = request.getSession();
         String customerUsername = (String) session.getAttribute("username");
         String userID = String.valueOf(userDAO.getID(customerUsername));
-
-        // Redirect back to the user packages page
-        response.sendRedirect("UserPackages");
+        if (customPackageDAO.modifyCustomPackage(userID, packageId, activityIds, flightIds, hotelIds)) {
+            request.setAttribute("heading", "Custom Package Modified:");
+            request.setAttribute("message", "Your package is modified successfully!!");
+            request.getRequestDispatcher("modify_success.jsp").forward(request, response);
+        } else {
+            request.setAttribute("errorMessage", "Custom Package Modification Failed:");
+            request.setAttribute("errorCode", "Your package modification has failed!!");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
     }
 }

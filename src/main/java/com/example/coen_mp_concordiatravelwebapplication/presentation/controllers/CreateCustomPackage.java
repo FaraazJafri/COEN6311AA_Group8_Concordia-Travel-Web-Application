@@ -22,7 +22,7 @@ public class CreateCustomPackage extends HttpServlet {
     private HotelDAO hotelDAO;
     private UserDAO userDAO;
 
-    private PackageDAO customPackageDAO;
+    private CustomPackageDAO customPackageDAO;
     @Override
     public void init() throws ServletException {
         super.init();
@@ -30,7 +30,7 @@ public class CreateCustomPackage extends HttpServlet {
         activityDAO = new ActivityDAOImpl();
         flightDAO = new FlightDAOImpl();
         hotelDAO = new HotelDAOImpl();
-        customPackageDAO = new PackageDAOImpl();
+        customPackageDAO = new CustomPackageDAOImpl();
         userDAO = new UserDAOImpl();
     }
 

@@ -674,38 +674,6 @@ public class PackageDAOImpl implements PackageDAO {
         }
     }
 
-    @Override
-    public boolean addCustomPackage(String userID, String activityIds, String flightIds, String hotelIds) {
-        try {
-            Connection conn = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS);
-
-            String query = "INSERT INTO user_packages (user_id, activity_ids, flight_ids, hotel_ids) VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = conn.prepareStatement(query);
-
-            statement.setInt(1, Integer.parseInt(userID));
-            statement.setString(2, activityIds);
-            statement.setString(3, flightIds);
-            statement.setString(4, hotelIds);
-
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("Data inserted successfully");
-                statement.close();
-                conn.close();
-                return true;
-            } else {
-                System.out.println("Failed to insert data");
-                statement.close();
-                conn.close();
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
     private void deleteEntriesFromHotels(Connection connection, List<String> hotelIds) throws SQLException {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

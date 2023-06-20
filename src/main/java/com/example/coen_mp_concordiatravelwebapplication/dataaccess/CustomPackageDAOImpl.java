@@ -12,6 +12,73 @@ import java.util.List;
 
 public class CustomPackageDAOImpl implements CustomPackageDAO {
     @Override
+    public boolean addCustomPackage(String userID, String activityIds, String flightIds, String hotelIds) {
+        try {
+            Connection conn = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS);
+
+            String query = "INSERT INTO user_packages (user_id, activity_ids, flight_ids, hotel_ids) VALUES (?, ?, ?, ?)";
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            statement.setInt(1, Integer.parseInt(userID));
+            statement.setString(2, activityIds);
+            statement.setString(3, flightIds);
+            statement.setString(4, hotelIds);
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Data inserted successfully");
+                statement.close();
+                conn.close();
+                return true;
+            } else {
+                System.out.println("Failed to insert data");
+                statement.close();
+                conn.close();
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean modifyCustomPackage(String userID, String packageId, String activityIds, String flightIds, String hotelIds) {
+        try (Connection connection = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS)) {
+            // Disable auto-commit to allow transaction handling
+            connection.setAutoCommit(false);
+
+            String updateQuery = "UPDATE user_packages SET activity_ids=?, flight_ids=?, hotel_ids=? WHERE user_id=? AND package_id=?";
+
+            try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+                // Set the parameter values for the update statement
+                statement.setString(1, activityIds);
+                statement.setString(2, flightIds);
+                statement.setString(3, hotelIds);
+                statement.setString(4, userID);
+                statement.setString(5, packageId);
+
+                // Execute the update statement
+                int rowsAffected = statement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    // If the update was successful, commit the changes
+                    connection.commit();
+                    return true;
+                } else {
+                    // If no rows were affected, rollback the transaction
+                    connection.rollback();
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
     public List<TravelPackage> retrieveUserPackages(String userId) {
         List<TravelPackage> userPackages = new ArrayList<>();
 
