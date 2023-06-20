@@ -5,7 +5,6 @@ import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Fl
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Hotel;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
 import jakarta.servlet.ServletException;
-import org.eclipse.persistence.jpa.jpql.parser.AbstractEclipseLinkTraverseChildrenVisitor;
 
 import java.util.List;
 
@@ -23,4 +22,6 @@ public interface PackageDAO {
     Boolean modifyPackageDetails(String packageId, TravelPackage travelPackage) throws ServletException;
 
     Boolean removePackage(String packageId) throws ServletException;
+
+    boolean addCustomPackage(String userID, String activityId, String flightId, String hotelId);
 }

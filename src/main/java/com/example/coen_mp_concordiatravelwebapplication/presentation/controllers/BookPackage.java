@@ -26,6 +26,7 @@ public class BookPackage extends HttpServlet {
     private UserDAO userDAO;
     private BookingDAO bookingDAO;
     private NotificationDAO notificationDAO;
+    private CartDAO cartDAO;
 
     @Override
     public void init() throws ServletException {
@@ -36,6 +37,7 @@ public class BookPackage extends HttpServlet {
         userDAO = new UserDAOImpl();
         bookingDAO = new BookingDAOImpl();
         notificationDAO = new NotificationDAOImpl();
+        cartDAO = new CartDAOImpl();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -70,14 +72,18 @@ public class BookPackage extends HttpServlet {
             customerID = userDAO.getID(customerUsername);
         }
 
-        System.out.println();
+
         String customerIdToBook;
         // Retrieve the package ID, customer ID, and departure date from the request
         String packageIdToBook = request.getParameter("packageId");
         if ("Customer".equals(session.getAttribute("role"))) {
             customerIdToBook = String.valueOf(customerID);
+            cartDAO.addToCart(customerIdToBook, packageIdToBook, null);
         } else {
             customerIdToBook = request.getParameter("customerId");
+            String agentUsername = (String) session.getAttribute("username");
+            String agentID = String.valueOf(userDAO.getID(agentUsername));
+            cartDAO.addToCart(customerIdToBook, packageIdToBook, agentID);
         }
         String departureDate = request.getParameter("departureDate");
 
@@ -93,29 +99,33 @@ public class BookPackage extends HttpServlet {
 
         String bookingId = generateBookingId();
 
-        bookingDAO.saveBooking(bookingId, packageIdToBook, customerIdToBook, departure);
-        List<Booking> bookings = bookingDAO.getAllBookings();
-        request.setAttribute("bookings", bookings);
 
-        //Notification code
-        if ("Customer".equals(session.getAttribute("role"))) {
-            String message = "The booking was successful with the booking ID: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
-            notificationDAO.sendNotificationToUser(String.valueOf(customerID), message);
-        }else if("Agent".equals(session.getAttribute("role"))){
-            String customerUsername = (String) session.getAttribute("username");
-            customerID = userDAO.getID(customerUsername);
 
-            User user = userDAO.getUserById(String.valueOf(customerID));
 
-            String fullname = user.getFirstName() + " " + user.getLastName();
 
-            String message = "Your agent: " + fullname +" has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
-            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
-        }else if("Admin".equals(session.getAttribute("role"))){
-
-            String message = "The Admin has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
-            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
-        }
+//        bookingDAO.saveBooking(bookingId, packageIdToBook, customerIdToBook, departure);
+//        List<Booking> bookings = bookingDAO.getAllBookings();
+//        request.setAttribute("bookings", bookings);
+//
+//        //Notification code
+//        if ("Customer".equals(session.getAttribute("role"))) {
+//            String message = "The booking was successful with the booking ID: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
+//            notificationDAO.sendNotificationToUser(String.valueOf(customerID), message);
+//        }else if("Agent".equals(session.getAttribute("role"))){
+//            String customerUsername = (String) session.getAttribute("username");
+//            customerID = userDAO.getID(customerUsername);
+//
+//            User user = userDAO.getUserById(String.valueOf(customerID));
+//
+//            String fullname = user.getFirstName() + " " + user.getLastName();
+//
+//            String message = "Your agent: " + fullname +" has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
+//            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
+//        }else if("Admin".equals(session.getAttribute("role"))){
+//
+//            String message = "The Admin has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
+//            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
+//        }
 
         request.getRequestDispatcher("createpackagesuccess.jsp").forward(request, response);
     }

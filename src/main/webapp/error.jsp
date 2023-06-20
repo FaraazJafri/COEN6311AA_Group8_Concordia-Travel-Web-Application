@@ -7,7 +7,11 @@
   <title>Error</title>
 </head>
 <body>
-<h1 id="error-heading">Error</h1>
+
+<jsp:include page="menu.jsp"/>
+
+
+<h3 id="error-heading">Error</h3>
 <p id="error-message">An error has occurred:</p>
 
 <p class="error-message"><%= request.getAttribute("errorMessage") %></p>

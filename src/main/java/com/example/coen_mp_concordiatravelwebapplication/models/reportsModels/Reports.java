@@ -1,6 +1,7 @@
 package com.example.coen_mp_concordiatravelwebapplication.models.reportsModels;
 
-import com.example.coen_mp_concordiatravelwebapplication.dataaccess.ReportsDAO;import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
+import com.example.coen_mp_concordiatravelwebapplication.dataaccess.ReportsDAO;
+import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
 
 import java.sql.SQLException;

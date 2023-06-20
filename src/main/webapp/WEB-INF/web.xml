@@ -14,4 +14,14 @@
         <servlet-name>NotificationsServlet</servlet-name>
         <url-pattern>/notifications</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProcessPaymentServlet</servlet-name>
+        <servlet-class>com.example.coen_mp_concordiatravelwebapplication.presentation.controllers.ProcessPaymentServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ProcessPaymentServlet</servlet-name>
+        <url-pattern>/processPayment</url-pattern>
+    </servlet-mapping>
 </web-app>

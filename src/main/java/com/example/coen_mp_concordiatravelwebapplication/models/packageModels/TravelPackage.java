@@ -43,6 +43,13 @@ public class TravelPackage {
         this.activities = new ArrayList<>();
     }
 
+    public TravelPackage(int packageId, List<Activity> activities, List<Flight> flights, List<Hotel> hotels) {
+        this.packageId = String.valueOf(packageId);
+        this.activities = activities;
+        this.flights = flights;
+        this.hotels = hotels;
+    }
+
 
     public String getPackageId() {
         return packageId;

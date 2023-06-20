@@ -15,4 +15,6 @@ public interface BookingDAO {
     Boolean modifyBooking(String bookingId, String packageId, Timestamp departureDate);
     List<Booking> getBookingsByAgentId(int agentId);
 
+
+
 }

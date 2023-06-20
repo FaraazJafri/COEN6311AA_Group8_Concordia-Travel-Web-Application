@@ -23,7 +23,7 @@
     <% } %>
     <label for="departureDate">Departure Date:</label>
     <input type="datetime-local" id="departureDate" name="departureDate" required><br><br>
-    <input type="submit" value="Book Package">
+    <input type="submit" value="Add to Cart">
 </form>
 
 <h2>Available Travel Packages</h2>
