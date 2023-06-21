@@ -50,6 +50,9 @@ public class CustomerBookingsServlet extends HttpServlet {
                 request.setAttribute("selectedCustomer", fullName);
             }
             List<Booking> customerBookings = customerDAO.getSeletedCustomerBookings(String.valueOf(customerID));
+            List<Booking> customBookings = bookingDAO.fetchCustomBooking(String.valueOf(customerID));
+            request.setAttribute("customBookings",customBookings);
+
             request.setAttribute("customerBookings", customerBookings);
         }
         List<User> customers = new ArrayList<>();
@@ -65,6 +68,8 @@ public class CustomerBookingsServlet extends HttpServlet {
         }
         // Set the list of customers as a request attribute
         request.setAttribute("customers", customers);
+
+
 
         String condition = request.getParameter("condition");
         if (condition != null && condition.equals("Cancel")) {

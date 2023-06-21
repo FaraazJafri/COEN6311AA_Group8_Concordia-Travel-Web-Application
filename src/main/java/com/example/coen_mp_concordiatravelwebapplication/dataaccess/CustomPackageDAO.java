@@ -1,5 +1,6 @@
 package com.example.coen_mp_concordiatravelwebapplication.dataaccess;
 
+import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Activity;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Flight;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Hotel;
@@ -22,4 +23,7 @@ public interface CustomPackageDAO {
     boolean addCustomPackage(String userID, String activityIds, String flightIds, String hotelIds);
 
     boolean modifyCustomPackage(String userID, String packageId, String activityIds, String flightIds, String hotelIds);
+    TravelPackage retrieveUserPackagesForCart(String userId, String customPackageId);
+
+
 }

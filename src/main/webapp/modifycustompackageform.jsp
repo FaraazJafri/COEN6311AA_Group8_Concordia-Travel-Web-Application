@@ -8,9 +8,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Activities, Flights, and Hotels</title>
-    <link rel="stylesheet" type="text/css" href="css/displaypackage.css">
+    <link rel="stylesheet" type="text/css" href="css/bookpackage.css">
 </head>
 <body>
+<jsp:include page="menu.jsp"/>
+
 <form action="ModifyCustomPackageForm" method="post">
     <%String packageId = request.getParameter("packageId");%>
     <input type="hidden" id="packageId" name="packageId" value="${packageId}">

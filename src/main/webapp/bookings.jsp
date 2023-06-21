@@ -67,5 +67,35 @@
 <% } %>
 
 
+<h2>Custom Package Bookings</h2>
+<%
+    List<Booking> customBookings = (List<Booking>) request.getAttribute("customBookings");
+    if (customBookings != null && !customBookings.isEmpty()) {
+%>
+<div class="customer-bookings">
+    <table>
+        <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Package ID</th>
+            <th>Departure Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% for (Booking booking : customBookings) { %>
+        <tr>
+            <td><%= booking.getBookingId() %></td>
+            <td><%= booking.getPackageId() %></td>
+            <td><%= booking.getDepartureDate() %></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+<% } else { %>
+<p>No bookings found.</p>
+<% } %>
+
+
 </body>
 </html>

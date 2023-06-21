@@ -10,7 +10,7 @@ public class PaymentDAOImpl implements PaymentDAO {
 
 
     @Override
-    public String processPayement(String totalPrice, String cardNumberOfCustomer) {
+    public String processPayment(String totalPrice, String cardNumberOfCustomer) {
         // Retrieve the Stripe secret key
         String secretKey = STRIPECONFIG.SECRET_KEY;
 
@@ -20,7 +20,8 @@ public class PaymentDAOImpl implements PaymentDAO {
         try {
 
 
-            int paymentAmount = Integer.parseInt(String.valueOf(convertDollarsToCents(Long.parseLong(totalPrice))));
+            double paymentAmount = Double.parseDouble(totalPrice);
+            long paymentAmountInCents = convertDollarsToCents((long) paymentAmount);
 
             String cardNumber = cardNumberOfCustomer.trim();
             cardNumber = cardNumber.replaceAll("\\s", "");
@@ -29,7 +30,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             if (cardNumber.equals(STRIPECONFIG.successCardNumber)) {
                 PaymentIntentCreateParams confirmParams = PaymentIntentCreateParams.builder()
                         .setCurrency("cad")
-                        .setAmount((long) paymentAmount)
+                        .setAmount((long) paymentAmountInCents)
                         .setPaymentMethod("pm_card_visa")
                         .setConfirm(true)
                         .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.MANUAL)
@@ -43,7 +44,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             } else if (cardNumber.equals(STRIPECONFIG.declineCardNumber)) {
                 PaymentIntentCreateParams confirmParams = PaymentIntentCreateParams.builder()
                         .setCurrency("cad")
-                        .setAmount((long) paymentAmount)
+                        .setAmount((long) paymentAmountInCents)
                         .setPaymentMethod("pm_card_visa_chargeDeclined")
                         .setConfirm(true)
                         .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.MANUAL)
@@ -55,7 +56,7 @@ public class PaymentDAOImpl implements PaymentDAO {
             } else if (cardNumber.equals(STRIPECONFIG.insufficientBalanceCard)) {
                 PaymentIntentCreateParams confirmParams = PaymentIntentCreateParams.builder()
                         .setCurrency("cad")
-                        .setAmount((long) paymentAmount)
+                        .setAmount((long) paymentAmountInCents)
                         .setPaymentMethod("pm_card_visa_chargeDeclinedInsufficientFunds")
                         .setConfirm(true)
                         .setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.MANUAL)

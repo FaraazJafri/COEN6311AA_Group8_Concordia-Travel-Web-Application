@@ -8,6 +8,8 @@ import java.util.List;
 public interface BookingDAO {
     void saveBooking(String bookingId, String packageIdToBook, String customerIdToBook, Timestamp departureDate);
 
+    void saveCustomBooking(String bookingId, String customPackageIdToBook, String customerIdToBook, Timestamp departureDate);
+
     List<Booking> getAllBookings();
 
     int cancelBooking(String customerId, String bookingId);
@@ -15,6 +17,6 @@ public interface BookingDAO {
     Boolean modifyBooking(String bookingId, String packageId, Timestamp departureDate);
     List<Booking> getBookingsByAgentId(int agentId);
 
-
+    List<Booking> fetchCustomBooking(String userId);
 
 }

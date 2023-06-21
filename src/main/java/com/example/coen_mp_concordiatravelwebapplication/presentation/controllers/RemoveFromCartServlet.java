@@ -35,36 +35,51 @@ public class RemoveFromCartServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        if ("Agent".equals(session.getAttribute("role")) || "Admin".equals(session.getAttribute("role"))) {
-            String customerId = request.getParameter("customerId");
-            String packageId = request.getParameter("packageId");
+        if(!request.getParameter("condition").equals("customPackage")) {
+            if ("Agent".equals(session.getAttribute("role")) || "Admin".equals(session.getAttribute("role"))) {
+                String customerId = request.getParameter("customerId");
+                String packageId = request.getParameter("packageId");
 
-            String customerUsername = (String) session.getAttribute("username");
-            String agentId = String.valueOf(userDAO.getID(customerUsername));
+                String customerUsername = (String) session.getAttribute("username");
+                String agentId = String.valueOf(userDAO.getID(customerUsername));
 
-            boolean removed = cartDAO.removeFromCartForAgent(packageId, customerId, agentId);
+                boolean removed = cartDAO.removeFromCartForAgent(packageId, customerId, agentId);
 
-            if (removed) {
-                request.setAttribute("removalResult", "Successfully removed the package from the cart.");
+                if (removed) {
+                    request.setAttribute("removalResult", "Successfully removed the package from the cart.");
+                } else {
+                    request.setAttribute("removalResult", "Failed to remove the package from the cart.");
+                }
             } else {
-                request.setAttribute("removalResult", "Failed to remove the package from the cart.");
+                String customerUsername = (String) session.getAttribute("username");
+                String customerId = String.valueOf(userDAO.getID(customerUsername));
+                String packageId = request.getParameter("packageId");
+
+                boolean removed = cartDAO.removeFromCartForCustomer(packageId, customerId);
+
+                if (removed) {
+                    request.setAttribute("removalResult", "Successfully removed the package from the cart.");
+                } else {
+                    request.setAttribute("removalResult", "Failed to remove the package from the cart.");
+                }
             }
-        } else {
+
+
+            request.getRequestDispatcher("ViewCartServlet").forward(request, response);
+        }else{
             String customerUsername = (String) session.getAttribute("username");
             String customerId = String.valueOf(userDAO.getID(customerUsername));
-            String packageId = request.getParameter("packageId");
+            int packageId = Integer.parseInt(request.getParameter("packageId")) + 499;
 
-            boolean removed = cartDAO.removeFromCartForCustomer(packageId, customerId);
+            boolean removed = cartDAO.removeFromCartForUserPackage(String.valueOf(packageId), customerId);
 
             if (removed) {
                 request.setAttribute("removalResult", "Successfully removed the package from the cart.");
             } else {
                 request.setAttribute("removalResult", "Failed to remove the package from the cart.");
             }
+            request.getRequestDispatcher("ViewCartServlet").forward(request, response);
         }
-
-
-        request.getRequestDispatcher("ViewCartServlet").forward(request, response);
 
 
     }

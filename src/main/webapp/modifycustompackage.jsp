@@ -12,7 +12,9 @@
     <link rel="stylesheet" type="text/css" href="css/displaypackage.css">
 </head>
 <body>
-<h1>User Packages</h1>
+<jsp:include page="menu.jsp"/>
+
+<h3>User Packages</h3>
 
 <form method="post" action="ModifyCustomPackage">
     <label for="packageId">Package ID:</label>

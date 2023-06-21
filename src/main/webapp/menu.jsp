@@ -10,7 +10,7 @@
 </head>
 <body>
 <div id="logo-container">
-    <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
+    <img src="images/travelLogo.jpg" alt="Logo" id="logo">
 </div>
 
 <h1>Concordia Travel Booking System</h1>
@@ -27,7 +27,7 @@
         <li><a href="#">Packages</a>
             <ul>
                 <% if (session.getAttribute("role").equals("Customer")) { %>
-                <li><a href="CreateCustomPackage">Create a package</a></li>
+                <li><a href="CreateCustomPackage">Create a custom package</a></li>
                 <li><a href="UserPackagesServlet">Display custom packages</a></li>
                 <li><a href="ModifyCustomPackage">Modify a custom package</a></li>
                 <li><a href="RemoveCustomPackage">Remove a custom package</a></li>
@@ -43,6 +43,9 @@
         <li><a href="#">Bookings</a>
             <ul>
                 <li><a href="BookPackageServlet">Book a Package</a></li>
+                <% if (session.getAttribute("role").equals("Customer")) { %>
+                <li><a href="BookCustomPackageServlet">Book a custom package</a></li>
+                <% } %>
                 <li><a href="CustomerBookingsServlet">View your bookings</a></li>
                 <li><a href="CancelBookingServlet">Cancel your bookings</a></li>
                 <li><a href="ModifyBookingServlet">Modify your bookings</a></li>
@@ -71,12 +74,6 @@
                 <li><a href="searchprice.jsp">Search package by price</a></li>
             </ul>
         </li>
-        <li><a href="#">Payment</a>
-            <ul>
-                <li><a href="processPayment">Payment checkout</a></li>
-                <li><a href="paymentform.jsp">Payment paymentform</a></li>
-            </ul>
-        </li>
         <% if (session.getAttribute("role").equals("Admin") || session.getAttribute("role").equals("Agent")) { %>
         <li><a href="#">Reports</a>
             <ul>
@@ -84,13 +81,11 @@
             </ul>
         </li>
         <% } %>
-        <% if (session.getAttribute("role").equals("Customer") || session.getAttribute("role").equals("Agent")) { %>
         <li><a href="#">My Space</a>
             <ul>
                 <li><a href="ViewCartServlet">View Cart</a></li>
             </ul>
         </li>
-        <% } %>
         <li><a href="login.jsp">Logout</a></li>
         <li>
             <div id="notifications-menu">

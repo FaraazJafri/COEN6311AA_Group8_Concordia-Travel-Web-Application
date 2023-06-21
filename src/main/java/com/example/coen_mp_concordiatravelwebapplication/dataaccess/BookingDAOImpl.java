@@ -38,6 +38,30 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
+    public void saveCustomBooking(String bookingId, String customPackageIdToBook, String customerIdToBook, Timestamp departureDate) {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String insertQuery = "INSERT INTO custom_bookings (bookingId, custom_package_id, customerId, departureDate) VALUES (?, ?, ?, ?)";
+
+            PreparedStatement statement = connection.prepareStatement(insertQuery);
+            statement.setString(1, bookingId);
+            statement.setString(2, customPackageIdToBook);
+            statement.setString(3, customerIdToBook);
+            statement.setTimestamp(4, departureDate);
+
+            // Execute the query
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
     public List<Booking> getAllBookings() {
         List<Booking> bookings = new ArrayList<>();
         try {
@@ -168,6 +192,41 @@ public class BookingDAOImpl implements BookingDAO {
         }
 
         return bookings;
+    }
+
+    @Override
+    public List<Booking> fetchCustomBooking(String userId) {
+        List<Booking> customBookings = new ArrayList<>();
+
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String selectQuery = "SELECT * FROM custom_bookings";
+            PreparedStatement statement = connection.prepareStatement(selectQuery);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String bookingId = resultSet.getString("bookingId");
+                int customPackageId = Integer.parseInt(resultSet.getString("custom_package_id")) - 499;
+                String customerId = resultSet.getString("customerId");
+                Timestamp departureDate = resultSet.getTimestamp("departureDate");
+
+                Booking customBooking = new Booking(bookingId, String.valueOf(customPackageId), customerId, departureDate);
+                customBookings.add(customBooking);
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return customBookings;
     }
 
 

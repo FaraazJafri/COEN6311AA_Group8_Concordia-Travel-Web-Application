@@ -5,6 +5,7 @@ import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Ac
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Flight;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.Hotel;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
+import com.mysql.cj.PreparedQuery;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -100,7 +101,22 @@ public class CustomPackageDAOImpl implements CustomPackageDAO {
                 List<Flight> flights = fetchFlights(flightIds);
                 List<Hotel> hotels = fetchHotels(hotelIds);
 
+                double totalPrice = 0.0;
+
+                for (Activity activity : activities) {
+                    totalPrice += activity.getPrice();
+                }
+
+                for (Flight flight : flights) {
+                    totalPrice += flight.getPrice();
+                }
+
+                for (Hotel hotel : hotels) {
+                    totalPrice += hotel.getPrice();
+                }
+
                 TravelPackage userPackage = new TravelPackage(packageId, activities, flights, hotels);
+                userPackage.setPrice(totalPrice);
                 userPackages.add(userPackage);
             }
 
@@ -113,6 +129,57 @@ public class CustomPackageDAOImpl implements CustomPackageDAO {
         }
 
         return userPackages;
+    }
+
+    @Override
+    public TravelPackage retrieveUserPackagesForCart(String userId, String customPackageId) {
+
+        try {
+            Connection conn = DriverManager.getConnection(CONFIG.SQLURL, CONFIG.SQLUSER, CONFIG.SQLPASS);
+
+            String query = "SELECT * FROM user_packages WHERE user_id = ? AND package_id = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, userId);
+            statement.setString(2, customPackageId);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int packageId = resultSet.getInt("package_id") - 499;
+                String activityIds = resultSet.getString("activity_ids");
+                String flightIds = resultSet.getString("flight_ids");
+                String hotelIds = resultSet.getString("hotel_ids");
+
+                List<Activity> activities = fetchActivities(activityIds);
+                List<Flight> flights = fetchFlights(flightIds);
+                List<Hotel> hotels = fetchHotels(hotelIds);
+
+                double totalPrice = 0.0;
+
+                for (Activity activity : activities) {
+                    totalPrice += activity.getPrice();
+                }
+
+                for (Flight flight : flights) {
+                    totalPrice += flight.getPrice();
+                }
+
+                for (Hotel hotel : hotels) {
+                    totalPrice += hotel.getPrice();
+                }
+
+                TravelPackage userPackage = new TravelPackage(packageId, activities, flights, hotels);
+                userPackage.setPrice(totalPrice);
+                return userPackage;
+            }
+
+            resultSet.close();
+            statement.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

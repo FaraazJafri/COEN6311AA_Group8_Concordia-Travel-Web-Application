@@ -6,7 +6,7 @@
 
 body {
     font-family: "Helvetica Neue", helvetica, arial;
-    background-color: lightgrey;
+    background-color: #DEEBF7;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -17,16 +17,20 @@ body {
     padding: 0;
 }
 
-#logo-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
+/*#logo-container {*/
+/*    border-radius: 50%;*/
+/*    overflow: hidden;*/
+/*    width: 150px;*/
+/*    height: 150px;*/
+/*}*/
 
 #logo {
-    max-width: 150px; /* Adjust the max-width to your desired size */
-    height: auto; /* Maintain aspect ratio */
-    object-fit: contain; /* Ensures the image fits inside the specified dimensions */
-    clip-path: inset(0 0 20% 0); /* Crop the logo from below by 20% */
+    max-width: 400px;
+    height: auto;
+    object-fit: contain;
+    clip-path: none;
+    mix-blend-mode: darken;
+    filter: contrast(1);
 }
 
 

@@ -12,7 +12,11 @@
     <link rel="stylesheet" type="text/css" href="css/displaypackage.css">
 </head>
 <body>
-<h1>User Packages</h1>
+
+<jsp:include page="menu.jsp"/>
+
+
+<h3>User Packages</h3>
 <%
     List<TravelPackage> userPackages = (List<TravelPackage>) request.getAttribute("userPackages");
     if (userPackages != null && !userPackages.isEmpty()) {
@@ -24,6 +28,7 @@
         <th>Activities</th>
         <th>Flights</th>
         <th>Hotels</th>
+        <th>Total Price</th>
     </tr>
     </thead>
     <tbody>
@@ -103,6 +108,9 @@
                     }
                 %>
             </ul>
+        </td>
+        <td>
+            <%= travelPackage.getPrice() %>
         </td>
     </tr>
     <%

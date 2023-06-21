@@ -9,7 +9,7 @@
 <body>
 
 <div id="logo-container">
-  <img src="images/travel%20logo%202.jpg" alt="Logo" id="logo">
+  <img src="images/travelLogo.jpg" alt="Logo" id="logo">
 </div>
 
 <h1>Concordia Travel Booking System</h1>

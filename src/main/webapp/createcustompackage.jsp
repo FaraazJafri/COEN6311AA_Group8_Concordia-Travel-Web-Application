@@ -8,9 +8,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Activities, Flights, and Hotels</title>
-  <link rel="stylesheet" type="text/css" href="css/displaypackage.css">
+  <link rel="stylesheet" type="text/css" href="css/bookpackage.css">
 </head>
 <body>
+
+<jsp:include page="menu.jsp"/>
 <form action="CreateCustomPackage" method="post">
   <label for="activityIds">Activity IDs (comma-separated):</label>
   <input type="text" id="activityIds" name="activityIds"><br><br>

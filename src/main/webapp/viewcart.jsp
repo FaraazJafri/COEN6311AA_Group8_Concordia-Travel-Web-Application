@@ -34,7 +34,7 @@
 </form>
 <% } %>
 
-
+<h2>Your Cart</h2>
 <% List<TravelPackage> travelPackages = (List<TravelPackage>) request.getAttribute("travelPackages");
     if (travelPackages != null && !travelPackages.isEmpty()) { %>
 <table>
@@ -149,12 +149,14 @@
 </div>
 
 <div class="buttons-container">
-    <form action="ProcessPaymentServlet" method="POST">
+    <form action="processPayment" method="get">
         <input type="hidden" name="customerId" value="<%= request.getAttribute("selectedCustomerId") %>">
         <input type="hidden" name="agentId" value="<%= request.getAttribute("selectedAgentId") != null ? request.getAttribute("selectedAgentId") : "" %>">
         <% for (TravelPackage travelPackage : travelPackages) { %>
         <input type="hidden" name="packageIds" value="<%= travelPackage.getPackageId() %>">
         <% } %>
+        <input type="hidden" name="totalBill" value="<%= totalBill %>">
+        <input type="hidden" name="condition" value="normalPackage">
         <button class="checkout-button" type="submit">Proceed to Checkout</button>
     </form>
 </div>
@@ -170,5 +172,154 @@
 </p>
 <% } %>
 
+
+<h2>You Custom Package Cart:</h2>
+<%
+    List<TravelPackage> userPackages = (List<TravelPackage>) request.getAttribute("userPackages");
+    if (userPackages != null && !userPackages.isEmpty()) {
+%>
+<table>
+    <thead>
+    <tr>
+        <th>Package ID</th>
+        <th>Activities</th>
+        <th>Flights</th>
+        <th>Hotels</th>
+        <th>Total Price</th>
+        <th>Remove</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%
+        for (TravelPackage travelPackage : userPackages) {
+    %>
+    <tr>
+        <td><%= travelPackage.getPackageId() %>
+        </td>
+        <td>
+            <ul>
+                <%
+                    List<Activity> activities = travelPackage.getActivities();
+                    if (activities != null && !activities.isEmpty()) {
+                        for (Activity activity : activities) {
+                %>
+                <li>Name: <%= activity.getName() %>
+                </li>
+                <li>Description: <%= activity.getDescription() %>
+                </li>
+                <li>Price: <%= activity.getPrice() %>
+                </li>
+                <%
+                    }
+                } else {
+                %>
+                <li>No activities found.</li>
+                <%
+                    }
+                %>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <%
+                    List<Flight> flights = travelPackage.getFlights();
+                    if (flights != null && !flights.isEmpty()) {
+                        for (Flight flight : flights) {
+                %>
+                <li>Airline: <%= flight.getAirline() %>
+                </li>
+                <li>Departure: <%= flight.getDeparture() %>
+                </li>
+                <li>Arrival: <%= flight.getArrival() %>
+                </li>
+                <li>Price: <%= flight.getPrice() %>
+                </li>
+                <%
+                    }
+                } else {
+                %>
+                <li>No flights found.</li>
+                <%
+                    }
+                %>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <%
+                    List<Hotel> hotels = travelPackage.getHotels();
+                    if (hotels != null && !hotels.isEmpty()) {
+                        for (Hotel hotel : hotels) {
+                %>
+                <li>Name: <%= hotel.getName() %>
+                </li>
+                <li>Location: <%= hotel.getLocation() %>
+                </li>
+                <li>Price: <%= hotel.getPrice() %>
+                </li>
+                <%
+                    }
+                } else {
+                %>
+                <li>No hotels found.</li>
+                <%
+                    }
+                %>
+            </ul>
+        </td>
+        <td>
+            <%= travelPackage.getPrice() %>
+        </td>
+        <td>
+            <form action="RemoveFromCartServlet" method="POST">
+                <input type="hidden" name="packageId" value="<%= travelPackage.getPackageId() %>">
+                <input type="hidden" name="customerId" value="<%= request.getAttribute("selectedCustomerId") %>">
+                <input type="hidden" name="condition" value="customPackage">
+                <input type="submit" value="Remove">
+            </form>
+        </td>
+    </tr>
+    <%
+        }
+    %>
+    </tbody>
+</table>
+
+
+
+<% double totalPrice = 0.0;
+    for (TravelPackage travelPackage : userPackages) {
+        totalPrice += travelPackage.getPrice();
+    } %>
+
+
+<% double taxRate = 0.15;
+    double totalBill = totalPrice + (totalPrice * taxRate); %>
+
+<div class="total-section">
+    <p class="total-price"> <%= totalPrice %></p>
+    <p class="tax-amount"> <%= String.format("%.2f", totalPrice * 0.15) %></p>
+    <p class="total-bill"> <%= totalBill %></p>
+</div>
+
+<div class="buttons-container">
+    <form action="processPayment" method="get">
+        <input type="hidden" name="customerId" value="<%= request.getAttribute("selectedCustomerId") %>">
+        <input type="hidden" name="agentId" value="<%= request.getAttribute("selectedAgentId") != null ? request.getAttribute("selectedAgentId") : "" %>">
+        <% for (TravelPackage travelPackage : userPackages) { %>
+        <input type="hidden" name="packageIds" value="<%= travelPackage.getPackageId() %>">
+        <% } %>
+        <input type="hidden" name="totalBill" value="<%= totalBill %>">
+        <input type="hidden" name="condition" value="customPackage">
+        <button class="checkout-button" type="submit">Proceed to Checkout</button>
+    </form>
+</div>
+<%
+} else {
+%>
+<p class="empty-cart-message">Your Custom Package Cart is Empty!</p>
+<%
+    }
+%>
 </body>
 </html>

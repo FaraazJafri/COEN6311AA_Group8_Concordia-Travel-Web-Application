@@ -2,7 +2,6 @@ package com.example.coen_mp_concordiatravelwebapplication.presentation.controlle
 
 import com.example.coen_mp_concordiatravelwebapplication.dataaccess.*;
 import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Booking;
-import com.example.coen_mp_concordiatravelwebapplication.models.bookingModels.Customer;
 import com.example.coen_mp_concordiatravelwebapplication.models.packageModels.TravelPackage;
 import com.example.coen_mp_concordiatravelwebapplication.models.userModels.User;
 import jakarta.servlet.ServletException;
@@ -13,14 +12,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "BookPackageServlet", value = "/BookPackageServlet")
-public class BookPackage extends HttpServlet {
+public class BookPackageServlet extends HttpServlet {
     private PackageDAO packageDAO;
     private CustomerDAO customerDAO;
     private UserDAO userDAO;
@@ -72,22 +74,17 @@ public class BookPackage extends HttpServlet {
             customerID = userDAO.getID(customerUsername);
         }
 
-
-        String customerIdToBook;
-        // Retrieve the package ID, customer ID, and departure date from the request
-        String packageIdToBook = request.getParameter("packageId");
-        if ("Customer".equals(session.getAttribute("role"))) {
-            customerIdToBook = String.valueOf(customerID);
-            cartDAO.addToCart(customerIdToBook, packageIdToBook, null);
-        } else {
-            customerIdToBook = request.getParameter("customerId");
-            String agentUsername = (String) session.getAttribute("username");
-            String agentID = String.valueOf(userDAO.getID(agentUsername));
-            cartDAO.addToCart(customerIdToBook, packageIdToBook, agentID);
-        }
         String departureDate = request.getParameter("departureDate");
 
-        // Convert departure and arrival strings to timestamps
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime departureCheck = LocalDateTime.parse(departureDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        if (departureCheck.isBefore(now)) {
+            request.setAttribute("errorMessage", "Departure date must be after the current date and time.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
+
         SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
         Timestamp departure = null;
         try {
@@ -97,44 +94,36 @@ public class BookPackage extends HttpServlet {
         }
 
 
-        String bookingId = generateBookingId();
+        String customerIdToBook;
+        // Retrieve the package ID, customer ID, and departure date from the request
+        String packageIdToBook = request.getParameter("packageId");
+        boolean isDuplicate = false; // Flag to check for duplicates
 
+        if ("Customer".equals(session.getAttribute("role"))) {
+            customerIdToBook = String.valueOf(customerID);
+            isDuplicate = cartDAO.checkDuplicatePackage(customerIdToBook, packageIdToBook, null);
+        } else {
+            customerIdToBook = request.getParameter("customerId");
+            String agentUsername = (String) session.getAttribute("username");
+            String agentID = String.valueOf(userDAO.getID(agentUsername));
+            isDuplicate = cartDAO.checkDuplicatePackage(customerIdToBook, packageIdToBook, agentID);
+        }
 
+        if (!isDuplicate) {
+            if ("Customer".equals(session.getAttribute("role"))) {
+                cartDAO.addToCart(customerIdToBook, packageIdToBook, null, null, departure);
+            } else {
+                customerIdToBook = request.getParameter("customerId");
+                String agentUsername = (String) session.getAttribute("username");
+                String agentID = String.valueOf(userDAO.getID(agentUsername));
+                cartDAO.addToCart(customerIdToBook, packageIdToBook, agentID, null, departure);
+            }
+        }
 
-
-
-//        bookingDAO.saveBooking(bookingId, packageIdToBook, customerIdToBook, departure);
-//        List<Booking> bookings = bookingDAO.getAllBookings();
-//        request.setAttribute("bookings", bookings);
-//
-//        //Notification code
-//        if ("Customer".equals(session.getAttribute("role"))) {
-//            String message = "The booking was successful with the booking ID: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
-//            notificationDAO.sendNotificationToUser(String.valueOf(customerID), message);
-//        }else if("Agent".equals(session.getAttribute("role"))){
-//            String customerUsername = (String) session.getAttribute("username");
-//            customerID = userDAO.getID(customerUsername);
-//
-//            User user = userDAO.getUserById(String.valueOf(customerID));
-//
-//            String fullname = user.getFirstName() + " " + user.getLastName();
-//
-//            String message = "Your agent: " + fullname +" has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
-//            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
-//        }else if("Admin".equals(session.getAttribute("role"))){
-//
-//            String message = "The Admin has booked a package with booking Id: " + bookingId + ", check your bookings in (View Your Bookings) section now!";
-//            notificationDAO.sendNotificationToUser(String.valueOf(customerIdToBook), message);
-//        }
-
-        request.getRequestDispatcher("createpackagesuccess.jsp").forward(request, response);
+        request.setAttribute("heading", "Booking:");
+        request.setAttribute("message", "Your booking has been added to the cart!! Proceed to View Cart for checkout.");
+        request.getRequestDispatcher("modify_success.jsp").forward(request, response);
     }
 
-    private String generateBookingId() {
-        int random = (int) (Math.random() * 9000) + 1000;
-        long timestamp = System.currentTimeMillis();
-        String bookingId = String.valueOf(random) + String.valueOf(timestamp);
-        bookingId = bookingId.substring(bookingId.length() - 4);
-        return bookingId;
-    }
+
 }
